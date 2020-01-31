@@ -42,3 +42,10 @@
 
 #0123
 -피드백: 메뉴 DB를 따로 관리-> 프로그램에서 참조/호출하여 사용
+
+#0131
+메뉴 버튼->QPushbutton으로 구현?(click count?)
+수량 카운트 ->label로 일단 구현? 버튼으로 구현?
+전체 창 ->QDialog 대화창 구성?
+inputdialog(수량변경), Qmessagebox(결제팝업)
+pyinstaller 이용해서 python 없는 환경에서도 exe로 실행되도록
