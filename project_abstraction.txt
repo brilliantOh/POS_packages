@@ -49,3 +49,9 @@
 전체 창 ->QDialog 대화창 구성?
 inputdialog(수량변경), Qmessagebox(결제팝업)
 pyinstaller 이용해서 python 없는 환경에서도 exe로 실행되도록
+
+#0204
+메뉴: QPushbutton
+수량: QLabel
+수량 +-x: QPushbutton
+수량변경: QPushbutton -> QInputDialog
