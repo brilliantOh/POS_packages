@@ -55,3 +55,11 @@ pyinstaller 이용해서 python 없는 환경에서도 exe로 실행되도록
 수량: QLabel
 수량 +-x: QPushbutton
 수량변경: QPushbutton -> QInputDialog
+
+#0206
+menu1_count 변수 정의
+메뉴 선택시 menuClicked를 call해서 수량label이 바뀌도록 함
+menuAdd, menuMinus, menuInputDialog, menuCancel 추가
+메뉴마다 5개의 함수를 정의해야 해서 메뉴수X5의 함수가 생기는데 이렇게 하는 게 맞을까?
+수량 0일 때 해당 메뉴 위젯을 주문현황에서 보이지 않게 하는 기능?
++ 수량이 0보다 클 때 해당 메뉴 위젯을 주문현황에 표시하는 기능?
