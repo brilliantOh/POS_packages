@@ -29,7 +29,7 @@ price_mul_quantity()
 import os
 import pandas as pd
 
-filepath = r'D:\Documents\GitHub\self-study\menu_excel.xlsx'
+filepath = './menu_excel.xlsx'
 menu_excel = pd.read_excel(filepath)
 menu_excel
 
