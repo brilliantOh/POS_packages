@@ -63,3 +63,9 @@ menuAdd, menuMinus, menuInputDialog, menuCancel 추가
 메뉴마다 5개의 함수를 정의해야 해서 메뉴수X5의 함수가 생기는데 이렇게 하는 게 맞을까?
 수량 0일 때 해당 메뉴 위젯을 주문현황에서 보이지 않게 하는 기능?
 + 수량이 0보다 클 때 해당 메뉴 위젯을 주문현황에 표시하는 기능?
+
+#0211
+Clicked, Add, Minus, InputDialog, Cancel
+함수는 이렇게 5개만 정의하고 무슨 메뉴 때문에 call됐는지 파악 가능하도록 해야 할듯?
+-> 메뉴가 인스턴스인 클래스에서 넘겨주는 방법?
+버튼 clicked call할 때 nonetype으로 넘어가는 문제 발생
