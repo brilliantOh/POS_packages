@@ -69,3 +69,13 @@ Clicked, Add, Minus, InputDialog, Cancel
 함수는 이렇게 5개만 정의하고 무슨 메뉴 때문에 call됐는지 파악 가능하도록 해야 할듯?
 -> 메뉴가 인스턴스인 클래스에서 넘겨주는 방법?
 버튼 clicked call할 때 nonetype으로 넘어가는 문제 발생
+
+#0212
+groupbox와 gridlayout 적용해서 UI 변경
+self.menuClicked call할 때 lambda에 태우니 TypeError 해결됨.
+그런데 for문으로 간략하게 만들 수 있을 거 같은데...왜인지 안 됨.
+메뉴마다 clicked.connect문을 써줘서 일단 skip. 메뉴 늘면 코드 늘어남(1)
+menu_list에 메뉴 클래스 인스턴스들을 담았음
+initialize.py -> menu_excel, Menu cls, instance들을 정의한 모듈
+그런데 모든 메뉴 인스턴스들을 변수 정의하고 load해야 할까? 메뉴 늘면 코드 늘어남(2)
+클래스 메서드로 총액 계산하는 기능 추가해야 함

@@ -37,16 +37,16 @@ class MyApp(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.btn0 = QPushButton(menu_excel['메뉴명'][0], self)  # pushbutton #메뉴
-        self.btn1 = QPushButton(menu_excel['메뉴명'][1], self)  # pushbutton #메뉴
+        self.btns_menu = []
+        for i in range(4):
+            self.btns_menu.append(QPushButton(menu_excel['메뉴명'][i], self))
+            self.btns_menu[i].clicked.connect(self.menuClicked(i))
 
         self.lbl0 = QLabel('0', self) #label #수량
         self.lbl1 = QLabel('0', self) #label #수량
         self.lbl_menu0 = QLabel(menu_excel['메뉴명'][0], self)  # 주문현황의 메뉴
         self.lbl_menu1 = QLabel(menu_excel['메뉴명'][1], self)  # 주문현황의 메뉴
 
-        self.btn0.clicked.connect(self.menuClicked(0))  # clicked signal -> call menuClicked
-        self.btn1.clicked.connect(self.menuClicked(1))  # clicked signal -> call menuClicked
 
         hbox = QHBoxLayout()  #주문현황 part #HorizentalBox 수평 레이아웃
         hbox.addWidget(self.lbl_menu0)
@@ -54,7 +54,7 @@ class MyApp(QWidget):
         hbox.addWidget(self.lbl_menu1)
         hbox.addWidget(self.lbl1)
 
-        hbox2 = QHBoxLayout() #메뉴 part #HorizentalBox 수평 레이아웃
+
         hbox2.addWidget(self.btn0)
         hbox2.addWidget(self.btn1)
 
