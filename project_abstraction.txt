@@ -79,3 +79,7 @@ menu_list에 메뉴 클래스 인스턴스들을 담았음
 initialize.py -> menu_excel, Menu cls, instance들을 정의한 모듈
 그런데 모든 메뉴 인스턴스들을 변수 정의하고 load해야 할까? 메뉴 늘면 코드 늘어남(2)
 클래스 메서드로 총액 계산하는 기능 추가해야 함
+
+#0213
+전체 수량, 전체 금액 정의하려면 전체 인스턴스의 특정 속성을 불러와야 하는데 일단 불가능.
+qt_canceled를 qt_changed 기능에 통합

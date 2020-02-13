@@ -1,44 +1,59 @@
-#GUI_200212
+# GUI_200213
 
-#initialize part
+# initialize part
 from initialize import menu_excel, Menu, americano, latte, iceamericano, icelatte
-#menu_list
+
+# 편의를 위한 menu_list 정의
 menu_list = [americano, latte, iceamericano, icelatte]
 
-#GUI part
+# GUI part
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QGroupBox, QInputDialog, \
-    QHBoxLayout, QVBoxLayout, QGridLayout
+    QMessageBox, QVBoxLayout, QGridLayout
+from PyQt5.QtGui import QIcon
+
 
 class MyApp(QWidget):
     def __init__(self):
-        super().__init__() #기반 class의 __init__ call
+        super().__init__()  # 기반 class의 __init__ call
         self.initUI()
 
     def initUI(self):
+        self.setWindowTitle('POS by brilliantOh')  # 창 이름
+        self.setGeometry(600, 300, 480, 320)  # 창 size
+
         grid = QGridLayout()
-        grid.addWidget(self.createGB0(),0,0) #groupbox
-        grid.addWidget(self.createGB1(),0,1) #groupbox
+        grid.addWidget(self.createGB0(), 0, 0)  # groupbox # 주문현황
+        grid.addWidget(self.createGB1(), 0, 1)  # groupbox # 메뉴선택
 
-        self.setLayout(grid) #gridlayout
+        self.setLayout(grid)  # gridlayout
 
-        self.setWindowTitle('POS by brilliantOh')
-        self.setGeometry(600,300,480,320)
-        self.show()
+        self.show()  # 그리기
 
-    def createGB0(self): #주문현황 #grid:(0,0)
+    # 종료 이벤트
+    def closeEvent(self, event):
+        reply = QMessageBox.question(self, '종료', 'POS를 종료합니까?',
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()
+
+    def createGB0(self):  # 주문현황 #grid:(0,0)
         gbox = QGroupBox('주문현황')
-        grid = QGridLayout() #gridlayout
+        grid = QGridLayout()  # gridlayout
 
-        self.lbls_menu = [] #메뉴명 label list
-        self.lbls_qt = [] #수량 label list
-        self.btns_minus = [] #수량- pushbutton list
-        self.btns_add = [] #수량+ pushbutton list
-        self.btns_cancel = [] #취소 pushbutton list
-        self.btns_input = [] #직접입력 pushbutton list
-        self.lbls_tot = [] #메뉴금액 label list
+        # widget list 정의
+        self.lbls_menu = []
+        self.lbls_qt = []
+        self.btns_minus = []
+        self.btns_add = []
+        self.btns_cancel = []
+        self.btns_input = []
+        self.lbls_tot = []
 
-        for i in range(len(menu_excel)): #widget 정의 및 추가 for문
+        # widget 정의 및 추가 for문
+        for i in range(len(menu_excel)):
             self.lbls_menu.append(QLabel(menu_excel['메뉴명'][i], self))
             self.lbls_qt.append(QLabel('0', self))
             self.btns_minus.append(QPushButton('-', self))
@@ -54,9 +69,7 @@ class MyApp(QWidget):
             grid.addWidget(self.btns_input[i], i, 5)
             grid.addWidget(self.lbls_tot[i], i, 6)
 
-        self.lbl_totsum = QLabel('0', self) #총액 label
-        grid.addWidget(self.lbl_totsum, 4, 6)
-
+        # pushbutton clicked signal call #보다 간략하게 수정 필요
         self.btns_minus[0].clicked.connect(lambda: self.menuMinus(0))
         self.btns_minus[1].clicked.connect(lambda: self.menuMinus(1))
         self.btns_minus[2].clicked.connect(lambda: self.menuMinus(2))
@@ -81,28 +94,33 @@ class MyApp(QWidget):
 
         return gbox
 
-    def createGB1(self): #메뉴선택 #grid:(0,1)
+    def createGB1(self):  # 메뉴선택 #grid:(0,1)
         gbox = QGroupBox('메뉴선택')
         vbox = QVBoxLayout()
 
-        self.btns_menu = [] #메뉴 pushbutton list
+        # widget list 정의
+        self.btns_menu = []
 
-        for i in range(len(menu_excel)): #pushbutton widget 정의 및 추가 for문
-            self.btns_menu.append(QPushButton(menu_excel['메뉴명'][i], self)) #메뉴 pushbutton
+        # widget 정의 및 추가 for문
+        for i in range(len(menu_excel)):
+            self.btns_menu.append(QPushButton(menu_excel['메뉴명'][i] + '\n'
+                                              + str(menu_excel['가격'][i])+ '원', self))
             vbox.addWidget(self.btns_menu[i])
 
-        self.btns_menu[0].clicked.connect(lambda: self.menuClicked(0)) #click signal->menuClicked
+        # pushbutton clicked signal call #보다 간략하게 수정 필요
+        self.btns_menu[0].clicked.connect(lambda: self.menuClicked(0))
         self.btns_menu[1].clicked.connect(lambda: self.menuClicked(1))
         self.btns_menu[2].clicked.connect(lambda: self.menuClicked(2))
         self.btns_menu[3].clicked.connect(lambda: self.menuClicked(3))
 
-        gbox.setLayout(vbox) #verticalbox layout
+        gbox.setLayout(vbox)  # verticalbox layout
 
         return gbox
 
-    def menuClicked(self, i): #pushbutton clicked signal call
-        self.lbls_qt[i].setText(str(menu_list[i].qt_changed(1))) #수량 label 변경
-        self.menuTot(i) #메뉴금액 계산 함수 call
+    # 버튼 클릭시 call할 함수 정의 # 수량
+    def menuClicked(self, i):
+        self.lbls_qt[i].setText(str(menu_list[i].qt_changed(1)))
+        self.menuTot(i)
 
     def menuMinus(self, i):
         self.lbls_qt[i].setText(str(menu_list[i].qt_changed(-1)))
@@ -113,23 +131,20 @@ class MyApp(QWidget):
         self.menuTot(i)
 
     def menuCancel(self, i):
-        self.lbls_qt[i].setText(str(menu_list[i].qt_canceled()))
+        self.lbls_qt[i].setText(str(menu_list[i].qt_changed(0)))
         self.menuTot(i)
 
-    def menuInputDialog(self, i): #수량변경
-        num, ok = QInputDialog.getInt(self, '수량 직접입력', '수량을 입력하세요.', min=0)
-
+    def menuInputDialog(self, i):
+        num, ok = QInputDialog.getInt(self, '수량 직접입력', menu_excel['메뉴명'][i] \
+                                      + '의 수량을 입력하세요.', min=0)
         if ok:
-            menu_list[i].qt = num
-            self.lbls_qt[i].setText(str(menu_list[i].qt))
+            self.lbls_qt[i].setText(str(menu_list[i].qt_changed(num)))
             self.menuTot(i)
 
-    def menuTot(self, i): #메뉴금액 계산
+    # 버튼 클릭시 call할 함수 정의 # 금액
+    def menuTot(self, i):
         self.lbls_tot[i].setText(str(menu_list[i].menu_tot()))
-        self.menuTotSum()
 
-    def menuTotSum(self): #총액 계산
-        self.lbl_totsum.setText((str(Menu.tot_sum())))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
