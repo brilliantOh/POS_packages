@@ -1,9 +1,11 @@
-#initialize
+# initialize_totsumqt
 
 # menu_excel load
 import pandas as pd
+
 filepath = './menu_excel.xlsx'
 menu_excel = pd.read_excel(filepath)
+
 
 # menu class
 class Menu:
@@ -15,7 +17,7 @@ class Menu:
         self.tot = 0
 
     # 수량 변경/취소
-    def qt_changed(self, num):
+    def menu_qt(self, num):
         # 음수 처리
         if self.qt + num < 0:
             self.qt = 0
@@ -25,16 +27,40 @@ class Menu:
         else:
             self.qt += num
 
+        total.tot_qt(self.qt)
+
         return self.qt
 
     # 메뉴 금액 계산
     def menu_tot(self):
         self.tot = self.qt * self.cost
 
+        total.tot_sum(self.tot)
+
         return self.tot
+
 
 # menu class instance 정의
 americano = Menu(0)
 latte = Menu(1)
 iceamericano = Menu(2)
 icelatte = Menu(3)
+
+
+#전체 수량, 총액 class
+class Total:
+    def __init__(self):
+        self.qt = 0
+        self.sum = 0
+
+    def tot_qt(self, qt):
+        self.qt += qt
+
+        return self.qt
+
+    def tot_sum(self, tot):
+        self.sum += tot
+
+        return self.sum
+
+total = Total()
