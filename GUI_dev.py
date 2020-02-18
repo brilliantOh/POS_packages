@@ -1,7 +1,7 @@
 # GUI_dev
 
 # initialize part
-from initialize_200215 import *
+from initialize_dev import *
 
 menu_list = [americano, latte, iceamericano, icelatte]
 
@@ -125,34 +125,40 @@ class MyApp(QWidget):
 
 
     # 수량, 금액 label setText
-    def lbltxt_changed(self, i):
-        self.lbls_qt[i].setText(str(menu_list[i].qt))
-        self.lbls_tot[i].setText(str(menu_list[i].tot))
+    def lbltxt_changed(self):
+        for i in range(len(menu_list)):
+            self.lbls_qt[i].setText(str(menu_list[i].qt))
+            self.lbls_tot[i].setText(str(menu_list[i].tot))
         self.lbl_totqt.setText(str(total.qt))
         self.lbl_totsum.setText(str(total.sum))
 
     # 수량 변경/취소
     def menuClicked(self, i):
         menu_list[i].menu_qt(1)
-        self.lbltxt_changed(i)
+        self.lbltxt_changed()
 
     def menuMinus(self, i):
         menu_list[i].menu_qt(-1)
-        self.lbltxt_changed(i)
+        self.lbltxt_changed()
 
     def menuAdd(self, i):
         self.menuClicked(i)
 
     def menuCancel(self, i):
         menu_list[i].menu_qt(0)
-        self.lbltxt_changed(i)
+        self.lbltxt_changed()
 
     def menuInputDialog(self, i):
         num, ok = QInputDialog.getInt(self, '수량 직접입력', menu_list[i].name \
                                       + '의 수량을 입력하세요.', min=0)
         if ok:
-            menu_list[i].menu_qt(num)
-            self.lbltxt_changed(i)
+            menu_list[i].menu_qt_input(num)
+            self.lbltxt_changed()
+
+    #전체 취소
+    def totalCancel(self):
+
+        self.lbltxt_changed()
 
 
 if __name__ == '__main__':

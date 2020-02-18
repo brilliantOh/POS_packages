@@ -96,3 +96,7 @@ label settext가 자주 쓰이니 분리해서 함수로 만들고 btn click시 
 menu_excel 대신 menu_list를 참조하도록 살짝 변경
 Total class 내 qt, tot list를 정의해서 sum하도록
 수량 직접입력도 menu_qt로 call되다보니 수량이 그냥 더해지기만 해서 변경 필요
+
+#0218
+수량 직접입력 함수(menu_qt_input) 추가
+전체 취소를 일단 menu class에 구현했음
