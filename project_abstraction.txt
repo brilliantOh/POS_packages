@@ -99,4 +99,10 @@ Total class 내 qt, tot list를 정의해서 sum하도록
 
 #0218
 수량 직접입력 함수(menu_qt_input) 추가
-전체 취소를 일단 menu class에 구현했음
+메뉴 금액 계산시(menu_tot) for문으로 모든 메뉴 계산하도록 변경 less efficient?
+lbltxt_changed도 i를 인자로 받았는데 삭제하고 for문으로 모든 메뉴 ~도록 변경 less efficient?
+전체 취소를 일단 menu class에 구현했는데 total 내가 아니라 뭔가 부자연스러움 일단 기능에는 문제 없음
+
+#0219
+현금결제, 카드결제 GUI 구현
+Sales 클래스에 주문내역을 order_df로 받고 history_df에 concatenate하도록 함

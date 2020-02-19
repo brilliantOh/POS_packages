@@ -70,9 +70,15 @@ class MyApp(QWidget):
 
         self.lbl_totqt = QLabel(str(total.qt), self)
         self.lbl_totsum = QLabel(str(total.sum), self)
+        self.btn_totcancel = QPushButton('전체취소', self)
+        self.btn_paycash = QPushButton('현금결제', self)
+        self.btn_paycard = QPushButton('카드결제', self)
 
         grid.addWidget(self.lbl_totqt, 4, 1)
         grid.addWidget(self.lbl_totsum, 4, 6)
+        grid.addWidget(self.btn_totcancel, 5, 1)
+        grid.addWidget(self.btn_paycash, 5, 5)
+        grid.addWidget(self.btn_paycard, 5, 6)
 
         gbox.setLayout(grid)
 
@@ -96,6 +102,10 @@ class MyApp(QWidget):
         self.btns_input[1].clicked.connect(lambda: self.menuInputDialog(1))
         self.btns_input[2].clicked.connect(lambda: self.menuInputDialog(2))
         self.btns_input[3].clicked.connect(lambda: self.menuInputDialog(3))
+
+        self.btn_totcancel.clicked.connect(self.totalCancel)
+        self.btn_paycash.clicked.connect(self.payCash)
+        self.btn_paycard.clicked.connect(self.payCard)
 
 
         return gbox
@@ -149,16 +159,53 @@ class MyApp(QWidget):
         self.lbltxt_changed()
 
     def menuInputDialog(self, i):
-        num, ok = QInputDialog.getInt(self, '수량 직접입력', menu_list[i].name \
-                                      + '의 수량을 입력하세요.', min=0)
+        num, ok = QInputDialog.getInt(self, '수량 직접입력',
+                                      menu_list[i].name + '의 수량을 입력하세요.', min=0)
         if ok:
             menu_list[i].menu_qt_input(num)
             self.lbltxt_changed()
 
-    #전체 취소
+    # 전체 취소
     def totalCancel(self):
+        americano.tot_cancel()
+        self.lbltxt_changed()
+
+    # 현금결제
+    def payCash(self):
+        money, ok = QInputDialog.getInt(self, '현금결제',
+                                      '결제할 금액: '+ str(total.sum) + '원' + '\n' + \
+                                       '받은 금액을 입력하세요.', min=total.sum)
+        if ok:
+            reply = QMessageBox.question(self, '현금결제: 거스름돈',
+                                         '결제할 금액: '+ str(total.sum) + '원' + '\n' + \
+                                         '받은 금액: '+ str(money) + '원' + '\n' + \
+                                         '거스름돈: ' + str(money-total.sum) + '원' + '\n' + \
+                                         '이대로 결제합니까?',
+                                         QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+            if reply == QMessageBox.Yes:
+                self.payComplete('현금')
+
+    # 카드결제
+    def payCard(self):
+        reply = QMessageBox.question(self, '카드결제',
+                                     '결제할 금액: '+ str(total.sum) + '원' + '\n' + \
+                                     '카드로 결제합니까?',
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+        if reply == QMessageBox.Yes:
+            self.payComplete('카드')
+
+    # 결제완료
+    def payComplete(self, method):
+        msg = QMessageBox.information(self, '결제완료',
+                                      '결제금액: '+ str(total.sum) + '원' + '\n' + \
+                                      '결제수단: '+ method + '\n' + \
+                                      '결제가 완료되었습니다.',
+                                      QMessageBox.Ok, QMessageBox.Ok)
+
+        sales.orderOccur()
 
         self.lbltxt_changed()
+
 
 
 if __name__ == '__main__':

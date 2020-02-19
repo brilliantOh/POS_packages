@@ -63,8 +63,6 @@ class Menu:
 
 
 
-
-
 #전체 수량, 총액 class
 class Total:
     def __init__(self):
@@ -95,6 +93,35 @@ class Total:
 
         return self.sum
 
+
+# 주문내역 class
+class Sales:
+    def __init__(self):
+        self.order_idx = 0
+        self.order_list = []
+        self.cols_list = ['주문번호', '메뉴명', '단가', '수량', '금액']
+        self.history_df = pd.DataFrame(columns=self.cols_list)
+
+    def orderOccur(self):
+        self.order_idx += 1
+        self.order_list.append(self.order_idx)
+
+        self.order_df = pd.DataFrame(columns=self.cols_list)
+
+        for i in range(len(menu_list)):
+            if menu_list[i].qt != 0:
+                temp_list = [self.order_idx, menu_list[i].name, menu_list[i].cost,
+                             menu_list[i].qt, menu_list[i].tot]
+                self.order_df = self.order_df.append(pd.DataFrame([temp_list],
+                                 columns=self.cols_list), ignore_index=True)
+
+        self.history_df = pd.concat([self.history_df, self.order_df], ignore_index=True)
+
+        americano.tot_cancel()
+
+        return self.order_df
+
+
 # instance 정의
 americano = Menu(0)
 latte = Menu(1)
@@ -104,3 +131,5 @@ icelatte = Menu(3)
 menu_list = [americano, latte, iceamericano, icelatte]
 
 total = Total()
+
+sales = Sales()
