@@ -106,3 +106,12 @@ lbltxt_changed도 i를 인자로 받았는데 삭제하고 for문으로 모든 �
 #0219
 현금결제, 카드결제 GUI 구현
 Sales 클래스에 주문내역을 order_df로 받고 history_df에 concatenate하도록 함
+
+#0220
+주문내역 df에 주문일시 추가
+결제금액 0원일 경우 결제 불가하게 현금/카드결제 앞에 if문 삽입하고 msgbox 띄우는 함수 call
+영수증출력 pushbutton 추가
+dataframe 출력을 위한 tableview, tablewidget 공부
+tabwidget으로 주문/결제, 내역조회 tab을 분리
+pyqtSlot으로 실행속도 빠르게
+주문내역 추가시 내역조회 tab에 pushbutton 추가 미구현
