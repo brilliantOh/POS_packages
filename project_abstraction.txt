@@ -115,3 +115,12 @@ dataframe 출력을 위한 tableview, tablewidget 공부
 tabwidget으로 주문/결제, 내역조회 tab을 분리
 pyqtSlot으로 실행속도 빠르게
 주문내역 추가시 내역조회 tab에 pushbutton 추가 미구현
+
+#0221
+현재 일시 update 미구현
+stable과 dev 분리
+주문현황 편의를 위한 order_now_list 정의
+확장성을 위해 Mainwindow 내 widget으로 배치
+주문현황을 tablewidget으로 구현중
+편의를 위한 menu_qt_changed 함수 추가(수량 변동시 call해서 금액 계산 call 등 처리)
+그런데 order_now와 menu_list의 len도 idx도 달라서 일괄 처리가 불가해보임
