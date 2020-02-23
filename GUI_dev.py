@@ -102,7 +102,7 @@ class FirstTab(QWidget):
         return gbox
 
 
-    # Table Widget: 주문 테이블
+    # Table Widget: 카트
     def createTable(self):
         # row, column 정의
         self.table.setColumnCount(6)
@@ -115,9 +115,9 @@ class FirstTab(QWidget):
         if total.qt == 0:
             self.table.clearContents()
         else:
-            for i in range(len(total.order_now_list)):
-                self.table.setItem(i, 0, QTableWidgetItem(total.order_now_list[i]))
-                #self.table.setItem(i, 1, QTableWidgetItem())
+            for i in range(len(total.cart_list)):
+                self.table.setItem(i, 0, QTableWidgetItem(total.cart_list[i]))
+                self.table.setItem(i, 1, QTableWidgetItem(total.cart_qt_list[i]))
 
 
     # Groupbox: 메뉴선택
