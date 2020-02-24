@@ -94,11 +94,11 @@ class FirstTab(QWidget):
         self.btn_paycash = QPushButton('현금결제', self)
         self.btn_paycard = QPushButton('카드결제', self)
 
+        grid.addWidget(self.lbl_datetime, 4, 0)
         grid.addWidget(self.lbl_totqt, 4, 1)
         grid.addWidget(self.lbl_totsum, 4, 6)
         grid.addWidget(self.btn_printbill, 5, 0)
         grid.addWidget(self.btn_totcancel, 5, 1)
-        grid.addWidget(self.lbl_datetime, 5, 2)
         grid.addWidget(self.btn_paycash, 5, 5)
         grid.addWidget(self.btn_paycard, 5, 6)
 
@@ -272,16 +272,6 @@ class SecondTab(QWidget):
 
     def createGB0(self):
         gbox = QGroupBox('주문결제내역')
-        vbox = QVBoxLayout()
-
-        self.btns_list = []
-
-        # 주문내역 번호별
-        for i in range(len(order.order_list)):
-            self.btns_list.append(QPushButton(str(order.order_idx_list[i]), self))
-            vbox.addWidget(self.btns_list[i])
-
-        gbox.setLayout(vbox)
 
         return gbox
 

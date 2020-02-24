@@ -105,19 +105,49 @@ class FirstTab(QWidget):
     # Table Widget: 카트
     def createTable(self):
         # row, column 정의
-        self.table.setColumnCount(6)
+        self.table.setColumnCount(8)
         self.table.setRowCount(4)
-        self.table.setHorizontalHeaderLabels(['메뉴', '수량', '증가', '감소', '직접입력', '취소'])
+
+        header_list = ['메뉴', '수량', '감소', '증가', '직접입력', '단가', '금액', '취소']
+        self.table.setHorizontalHeaderLabels(header_list)
+
 
     @pyqtSlot()
     def tableSetItem(self):
+        # cart_dic key, value
+        cart_keys_list = list(total.cart_dic.keys())
+        cart_values_list = list(total.cart_dic.values())
+
+        btn_add = QPushButton('+', self)
+
         # 전체 수량이 0일 경우
         if total.qt == 0:
             self.table.clearContents()
         else:
             for i in range(len(total.cart_list)):
-                self.table.setItem(i, 0, QTableWidgetItem(total.cart_list[i]))
-                self.table.setItem(i, 1, QTableWidgetItem(total.cart_qt_list[i]))
+                self.table.setItem(i, 0, QTableWidgetItem(cart_keys_list[i]))
+                self.table.setItem(i, 1, QTableWidgetItem(str(cart_values_list[i])))
+
+                self.table.cellClicked.connect(self.menuMinus)
+
+                self.table.setCellWidget(i, 3, btn_add)
+                btn_add.clicked.connect(self.menuAdd)
+
+    # 수량 변경/취소
+    @pyqtSlot(int, int)
+    def menuMinus(self, row, col):
+        total.cart_list[row].menu_qt(-1)
+        self.tableSetItem()
+
+    @pyqtSlot()
+    def menuAdd(self):
+        total.cart_list[0].menu_qt(1)
+        self.tableSetItem()
+
+    @pyqtSlot()
+    def menuCancel(self):
+        total.cart_list[0].menu_qt(0)
+        self.tableSetItem()
 
 
     # Groupbox: 메뉴선택

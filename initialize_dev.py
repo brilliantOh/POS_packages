@@ -16,7 +16,7 @@ class Menu:
         self.cost = menu_excel['가격'][idx]
         self.qt = 0
         self.tot = 0
-        self.cart_list = []
+
 
     # 메뉴 하나의 수량을 변경/취소
     def menu_qt(self, num):
@@ -63,7 +63,6 @@ class Menu:
         total.cart()
 
 
-
 #전체 수량, 총액 class
 class Total:
     def __init__(self):
@@ -76,8 +75,8 @@ class Total:
             self.qt_list.append(0)
             self.tot_list.append(0)
 
+        self.cart_dic = {}
         self.cart_list = []
-        self.cart_qt_list = []
 
     # 전체 수량 변경
     def tot_qt(self):
@@ -97,28 +96,25 @@ class Total:
 
         return self.sum
 
-    # 장바구니 관리
+    # 장바구니 관리: dic
     def cart(self):
-        # 전체 수량이 0
         if self.qt == 0:
+            # 전체 수량이 0
+            self.cart_dic = {}
             self.cart_list = []
-            self.cart_qt_list = []
         else:
             for i in range(len(menu_list)):
                 if menu_list[i].qt != 0:
-                    if menu_list[i].name not in self.cart_list:
-                        # 카트에 없던 메뉴 수량 변경
-                        self.cart_list.append(menu_list[i].name)
-                        self.cart_qt_list.append(menu_list[i].qt)
-                    else:
-                        # 이미 카트에 있는 메뉴 수량 변경
-                        pass
+                    # 메뉴의 수량이 0이 아닐 때
+                    self.cart_dic[menu_list[i].name] = menu_list[i].qt
+                    if menu_list[i] not in self.cart_list:
+                        self.cart_list.append(menu_list[i])
                 else:
-                    if menu_list[i].name in self.cart_list:
-                        # 이미 카트에 있는 메뉴 취소
-                        self.cart_list.remove(menu_list[i].name)
+                    if menu_list[i].name in self.cart_dic:
+                        # 메뉴의 수량이 0이고 장바구니에 있을 때
+                        del self.cart_dic[menu_list[i].name]
+                        self.cart_list.remove(menu_list[i])
 
-        return self.cart_list
 
 # 주문 class
 class Order:
