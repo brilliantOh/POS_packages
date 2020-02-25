@@ -57,10 +57,10 @@ class Menu:
 
     # 수량 변동시 call
     def menu_qt_changed(self):
-        self.menu_tot()
         total.tot_qt()
+        cart.cart()
+        self.menu_tot()
         total.tot_sum()
-        total.cart()
 
 
 #전체 수량, 총액 class
@@ -74,9 +74,6 @@ class Total:
         for i in range(len(menu_list)):
             self.qt_list.append(0)
             self.tot_list.append(0)
-
-        self.cart_dic = {}
-        self.cart_list = []
 
     # 전체 수량 변경
     def tot_qt(self):
@@ -96,24 +93,33 @@ class Total:
 
         return self.sum
 
+
+# 장바구니 class
+class Cart:
+    def __init__(self):
+        self.cart_dic = {}
+        self.cart_keys = list(self.cart_dic.keys())
+        self.cart_values = list(self.cart_dic.values())
+
     # 장바구니 관리: dic
     def cart(self):
-        if self.qt == 0:
+        if total.qt == 0:
             # 전체 수량이 0
             self.cart_dic = {}
-            self.cart_list = []
         else:
             for i in range(len(menu_list)):
                 if menu_list[i].qt != 0:
                     # 메뉴의 수량이 0이 아닐 때
-                    self.cart_dic[menu_list[i].name] = menu_list[i].qt
-                    if menu_list[i] not in self.cart_list:
-                        self.cart_list.append(menu_list[i])
+                    self.cart_dic[menu_list[i]] = menu_list[i].qt
                 else:
-                    if menu_list[i].name in self.cart_dic:
+                    if menu_list[i] in self.cart_dic:
                         # 메뉴의 수량이 0이고 장바구니에 있을 때
-                        del self.cart_dic[menu_list[i].name]
-                        self.cart_list.remove(menu_list[i])
+                        del self.cart_dic[menu_list[i]]
+
+        self.cart_keys = list(self.cart_dic.keys())
+        self.cart_values = list(self.cart_dic.values())
+
+        return self.cart_dic
 
 
 # 주문 class
@@ -136,13 +142,11 @@ class Order:
 
         self.order_df = pd.DataFrame(columns=self.cols_list)
 
-        # 메뉴 수량이 0이 아닐 때 주문정보를 현재 주문내역에 append
-        for i in range(len(menu_list)):
-            if menu_list[i].qt != 0:
-                temp_list = [self.order_idx, self.now_str,
-                             menu_list[i].name, menu_list[i].qt, menu_list[i].cost, menu_list[i].tot]
-                self.order_df = self.order_df.append(pd.DataFrame([temp_list],
-                                 columns=self.cols_list), ignore_index=True)
+        for i in range(len(cart.cart_keys)):
+            temp_list = [self.order_idx, self.now_str,
+                         cart.cart_keys[i].name, cart.cart_keys[i].qt, cart.cart_keys[i].cost, cart.cart_keys[i].tot]
+            self.order_df = self.order_df.append(pd.DataFrame([temp_list],
+                                                              columns=self.cols_list), ignore_index=True)
 
         # 현재 주문내역을 전체 주문내역과 concatenate
         self.history_df = pd.concat([self.history_df, self.order_df], ignore_index=True)
@@ -162,5 +166,5 @@ icelatte = Menu(3)
 menu_list = [americano, latte, iceamericano, icelatte]
 
 total = Total()
-
+cart = Cart()
 order = Order()

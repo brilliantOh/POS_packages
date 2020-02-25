@@ -7,10 +7,10 @@ menu_list = [americano, latte, iceamericano, icelatte]
 
 # GUI part
 import sys
-from PyQt5.QtCore import pyqtSlot, Qt, QDateTime
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QTabWidget, QTableWidget, QTableWidgetItem,
-                             QPushButton, QLabel, QGroupBox, QInputDialog, QMessageBox,
-                             QHBoxLayout, QVBoxLayout, QGridLayout)
+from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QTabWidget, QTableWidget, QTableWidgetItem, \
+    QPushButton, QLabel, QGroupBox, QInputDialog, QMessageBox, QHBoxLayout, QVBoxLayout, QGridLayout
+
 
 # Main Window
 class MyApp(QMainWindow):
@@ -81,11 +81,20 @@ class FirstTab(QWidget):
         self.createTable()
         vbox.addWidget(self.table)
 
-        btn_totcancel = QPushButton('전체취소', self)
         btn_printbill = QPushButton('영수증출력', self)
+        lbl_totqt = QLabel('전체수량', self)
+        self.lbl_qt = QLabel(str(total.qt), self)
+        lbl_totsum = QLabel('합계', self)
+        self.lbl_sum = QLabel(str(total.sum), self)
+        btn_totcancel = QPushButton('전체취소', self)
         btn_paycash = QPushButton('현금결제', self)
         btn_paycard = QPushButton('카드결제', self)
+
         hbox.addWidget(btn_printbill)
+        hbox.addWidget(lbl_totqt)
+        hbox.addWidget(self.lbl_qt)
+        hbox.addWidget(lbl_totsum)
+        hbox.addWidget(self.lbl_sum)
         hbox.addWidget(btn_totcancel)
         hbox.addWidget(btn_paycash)
         hbox.addWidget(btn_paycard)
@@ -94,8 +103,8 @@ class FirstTab(QWidget):
         gbox.setLayout(vbox)
 
         # Signal
-        btn_totcancel.clicked.connect(self.totalCancel)
         btn_printbill.clicked.connect(self.printBill)
+        btn_totcancel.clicked.connect(self.totalCancel)
         btn_paycash.clicked.connect(self.payCash)
         btn_paycard.clicked.connect(self.payCard)
 
@@ -111,42 +120,67 @@ class FirstTab(QWidget):
         header_list = ['메뉴', '수량', '감소', '증가', '직접입력', '단가', '금액', '취소']
         self.table.setHorizontalHeaderLabels(header_list)
 
-
     @pyqtSlot()
     def tableSetItem(self):
-        # cart_dic key, value
-        cart_keys_list = list(total.cart_dic.keys())
-        cart_values_list = list(total.cart_dic.values())
+        self.lbl_qt.setText(str(total.qt))
+        self.lbl_sum.setText(str(total.sum))
 
-        btn_add = QPushButton('+', self)
+        # reset
+        btns_minus = []
+        btns_add = []
+        btns_input = []
+        btns_cancel = []
 
-        # 전체 수량이 0일 경우
-        if total.qt == 0:
-            self.table.clearContents()
-        else:
-            for i in range(len(total.cart_list)):
-                self.table.setItem(i, 0, QTableWidgetItem(cart_keys_list[i]))
-                self.table.setItem(i, 1, QTableWidgetItem(str(cart_values_list[i])))
+        # table clear
+        self.table.clearContents()
 
-                self.table.cellClicked.connect(self.menuMinus)
+        # set
+        if total.qt != 0:
+            # 전체 수량이 0이 아닐 경우
+            for i in range(len(cart.cart_keys)):
+                self.table.setItem(i, 0, QTableWidgetItem(cart.cart_keys[i].name))
+                self.table.setItem(i, 1, QTableWidgetItem(str(cart.cart_keys[i].qt)))
+                self.table.setItem(i, 5, QTableWidgetItem(str(cart.cart_keys[i].cost)))
+                self.table.setItem(i, 6, QTableWidgetItem(str(cart.cart_keys[i].tot)))
 
-                self.table.setCellWidget(i, 3, btn_add)
-                btn_add.clicked.connect(self.menuAdd)
+                btns_minus.append(QPushButton('-', self))
+                btns_add.append(QPushButton('+', self))
+                btns_input.append(QPushButton('수량입력', self))
+                btns_cancel.append(QPushButton('x', self))
+
+                self.table.setCellWidget(i, 2, btns_minus[i])
+                self.table.setCellWidget(i, 3, btns_add[i])
+                self.table.setCellWidget(i, 4, btns_input[i])
+                self.table.setCellWidget(i, 7, btns_cancel[i])
+                # Signal
+                btns_minus[i].clicked.connect(lambda arg, idx=i: self.menuMinus(idx))
+                btns_add[i].clicked.connect(lambda arg, idx=i: self.menuAdd(idx))
+                btns_input[i].clicked.connect(lambda arg, idx=i: self.menuInputDialog(idx))
+                btns_cancel[i].clicked.connect(lambda arg, idx=i: self.menuCancel(idx))
+
 
     # 수량 변경/취소
-    @pyqtSlot(int, int)
-    def menuMinus(self, row, col):
-        total.cart_list[row].menu_qt(-1)
+    @pyqtSlot(int)
+    def menuMinus(self, idx):
+        cart.cart_keys[idx].menu_qt(-1)
         self.tableSetItem()
 
-    @pyqtSlot()
-    def menuAdd(self):
-        total.cart_list[0].menu_qt(1)
+    @pyqtSlot(int)
+    def menuAdd(self, idx):
+        cart.cart_keys[idx].menu_qt(1)
         self.tableSetItem()
 
-    @pyqtSlot()
-    def menuCancel(self):
-        total.cart_list[0].menu_qt(0)
+    @pyqtSlot(int)
+    def menuInputDialog(self, idx):
+        num, ok = QInputDialog.getInt(self, '수량 직접입력',
+                                      cart.cart_keys[idx].name + '의 수량을 입력하세요.', min=0)
+        if ok:
+            cart.cart_keys[idx].menu_qt_input(num)
+            self.tableSetItem()
+
+    @pyqtSlot(int)
+    def menuCancel(self, idx):
+        cart.cart_keys[idx].menu_qt(0)
         self.tableSetItem()
 
 
@@ -155,20 +189,14 @@ class FirstTab(QWidget):
         gbox = QGroupBox('메뉴선택')
         vbox = QVBoxLayout()
 
-        # widget list 정의
         btns_menu = []
 
-        # widget 정의 및 추가 for문
         for i in range(len(menu_list)):
-            btns_menu.append(QPushButton(menu_list[i].name + '\n'
-                                         + str(menu_list[i].cost) + '원', self))
+            btns_menu.append(QPushButton())
+            btns_menu[i].setText(menu_list[i].name + '\n' + str(menu_list[i].cost) + '원')
             vbox.addWidget(btns_menu[i])
-
-        # Signal
-        btns_menu[0].clicked.connect(lambda: self.menuClicked(0))
-        btns_menu[1].clicked.connect(lambda: self.menuClicked(1))
-        btns_menu[2].clicked.connect(lambda: self.menuClicked(2))
-        btns_menu[3].clicked.connect(lambda: self.menuClicked(3))
+            # Signal
+            btns_menu[i].clicked.connect(lambda arg, idx=i: self.menuClicked(idx))
 
         gbox.setLayout(vbox)
 
@@ -177,8 +205,8 @@ class FirstTab(QWidget):
     # Slot
     # 수량 변경/취소
     @pyqtSlot(int)
-    def menuClicked(self, i):
-        menu_list[i].menu_qt(1)
+    def menuClicked(self, idx):
+        menu_list[idx].menu_qt(1)
         self.tableSetItem()
 
     # 전체취소
@@ -190,8 +218,7 @@ class FirstTab(QWidget):
     # 영수증출력
     @pyqtSlot()
     def printBill(self):
-        msg = QMessageBox.information(self, '영수증출력',
-                                      str(order.order_df),
+        msg = QMessageBox.information(self, '영수증출력', str(order.order_df),
                                       QMessageBox.Ok, QMessageBox.Ok)
 
     # 현금결제
