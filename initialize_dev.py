@@ -2,6 +2,8 @@
 
 import pandas as pd
 from datetime import datetime
+from openpyxl import Workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
 
 # menu_excel load
 filepath = './menu_excel.xlsx'
@@ -99,7 +101,6 @@ class Cart:
     def __init__(self):
         self.cart_dic = {}
         self.cart_keys = list(self.cart_dic.keys())
-        self.cart_values = list(self.cart_dic.values())
 
     # 장바구니 관리: dic
     def cart(self):
@@ -109,7 +110,7 @@ class Cart:
         else:
             for i in range(len(menu_list)):
                 if menu_list[i].qt != 0:
-                    # 메뉴의 수량이 0이 아닐 때
+                    # 메뉴의 수량이 0이 아닐 때 # dic이라 key 중복 없이 덮어쓰기
                     self.cart_dic[menu_list[i]] = menu_list[i].qt
                 else:
                     if menu_list[i] in self.cart_dic:
@@ -117,7 +118,6 @@ class Cart:
                         del self.cart_dic[menu_list[i]]
 
         self.cart_keys = list(self.cart_dic.keys())
-        self.cart_values = list(self.cart_dic.values())
 
         return self.cart_dic
 
@@ -125,7 +125,7 @@ class Cart:
 # 주문 class
 class Order:
     def __init__(self):
-        # 주문번호 변수/리스트, df columns, 전체 주문내역 정의
+        # reset order_idx, dataframe, xlsx
         self.order_idx = 0
         self.order_idx_list = []
 
@@ -133,28 +133,42 @@ class Order:
         self.order_df = pd.DataFrame(columns=self.cols_list)
         self.history_df = pd.DataFrame(columns=self.cols_list)
 
+        self.wb = Workbook()
+        self.wb_filename = 'order_history.xlsx'
+        self.ws1 = self.wb.active
+        self.ws1.title = 'order'
+        self.ws1.append(self.cols_list)
+        self.wb.save(filename=self.wb_filename)
+
     # 주문접수
     def orderOccur(self):
+        # set order_idx, dataframe
         self.order_idx += 1
         self.order_idx_list.append(self.order_idx)
-
         self.now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
         self.order_df = pd.DataFrame(columns=self.cols_list)
 
         for i in range(len(cart.cart_keys)):
             temp_list = [self.order_idx, self.now_str,
                          cart.cart_keys[i].name, cart.cart_keys[i].qt, cart.cart_keys[i].cost, cart.cart_keys[i].tot]
-            self.order_df = self.order_df.append(pd.DataFrame([temp_list],
-                                                              columns=self.cols_list), ignore_index=True)
+            self.order_df = self.order_df.append(pd.DataFrame([temp_list], columns=self.cols_list), ignore_index=True)
 
-        # 현재 주문내역을 전체 주문내역과 concatenate
+        # concatenate dataframe
         self.history_df = pd.concat([self.history_df, self.order_df], ignore_index=True)
 
         # 전체취소 call
         americano.tot_cancel()
 
+        # 저장 call
+        self.orderSave()
+
         return self.order_df
+
+    # 주문정보 save(xlsx)
+    def orderSave(self):
+        for row in dataframe_to_rows(self.order_df, index=False, header=False):
+            self.ws1.append(row)
+            self.wb.save(filename=self.wb_filename)
 
 
 # instance 정의

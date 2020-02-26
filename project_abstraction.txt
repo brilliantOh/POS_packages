@@ -138,3 +138,9 @@ table에 btn 추가하고 수량 변경 함수 연결
 lambda 이용해서 for문에 clicked.connect문 간결하게 수정
 qt_changed 시 call할 함수 순서 변경해서 오류 없도록 수정
 전체수량, 총액 label 추가
+
+#0226
+orderSave : order_df -> order history.xlsx 저장
+btn click -> listwidget clear & addItem (order_idx)
+list가 별로여서 table로 수정할 계획
+그런데 같은 tab이 아니라 payComplete에 연결해서 결제시마다 update가 불가능해보임

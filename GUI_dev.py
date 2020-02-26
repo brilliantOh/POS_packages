@@ -9,7 +9,8 @@ menu_list = [americano, latte, iceamericano, icelatte]
 import sys
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QTabWidget, QTableWidget, QTableWidgetItem, \
-    QPushButton, QLabel, QGroupBox, QInputDialog, QMessageBox, QHBoxLayout, QVBoxLayout, QGridLayout
+    QPushButton, QLabel, QGroupBox, QInputDialog, QMessageBox, QHBoxLayout, QVBoxLayout, QGridLayout, \
+    QListWidget, QListWidgetItem
 
 
 # Main Window
@@ -122,10 +123,11 @@ class FirstTab(QWidget):
 
     @pyqtSlot()
     def tableSetItem(self):
+        # 전체 수량, 총액 label text
         self.lbl_qt.setText(str(total.qt))
         self.lbl_sum.setText(str(total.sum))
 
-        # reset
+        # reset widget
         btns_minus = []
         btns_add = []
         btns_input = []
@@ -134,7 +136,7 @@ class FirstTab(QWidget):
         # table clear
         self.table.clearContents()
 
-        # set
+        # set widget
         if total.qt != 0:
             # 전체 수량이 0이 아닐 경우
             for i in range(len(cart.cart_keys)):
@@ -172,8 +174,7 @@ class FirstTab(QWidget):
 
     @pyqtSlot(int)
     def menuInputDialog(self, idx):
-        num, ok = QInputDialog.getInt(self, '수량 직접입력',
-                                      cart.cart_keys[idx].name + '의 수량을 입력하세요.', min=0)
+        num, ok = QInputDialog.getInt(self, '수량 직접입력', cart.cart_keys[idx].name + '의 수량을 입력하세요.', min=0)
         if ok:
             cart.cart_keys[idx].menu_qt_input(num)
             self.tableSetItem()
@@ -202,8 +203,7 @@ class FirstTab(QWidget):
 
         return gbox
 
-    # Slot
-    # 수량 변경/취소
+    # 수량 추가
     @pyqtSlot(int)
     def menuClicked(self, idx):
         menu_list[idx].menu_qt(1)
@@ -218,8 +218,7 @@ class FirstTab(QWidget):
     # 영수증출력
     @pyqtSlot()
     def printBill(self):
-        msg = QMessageBox.information(self, '영수증출력', str(order.order_df),
-                                      QMessageBox.Ok, QMessageBox.Ok)
+        msg = QMessageBox.information(self, '영수증출력', str(order.order_df), QMessageBox.Ok, QMessageBox.Ok)
 
     # 현금결제
     @pyqtSlot()
@@ -247,8 +246,7 @@ class FirstTab(QWidget):
             self.payZeroWarning()
         else:
             reply = QMessageBox.question(self, '카드결제',
-                                         '결제할 금액: '+ str(total.sum) + '원' + '\n' + \
-                                         '카드로 결제합니까?',
+                                         '결제할 금액: '+ str(total.sum) + '원' + '\n' + '카드로 결제합니까?',
                                          QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
             if reply == QMessageBox.Yes:
                 self.payComplete('카드')
@@ -258,17 +256,14 @@ class FirstTab(QWidget):
     def payComplete(self, method):
         order.orderOccur()
 
-        msg = QMessageBox.information(self, '결제완료',
-                                      '결제수단: '+ method + '\n' + \
-                                      '결제가 완료되었습니다.',
+        msg = QMessageBox.information(self, '결제완료', '결제수단: '+ method + '\n' + '결제가 완료되었습니다.',
                                       QMessageBox.Ok, QMessageBox.Ok)
         self.tableSetItem()
 
     # 결제금액 0원 경고
     @pyqtSlot()
     def payZeroWarning(self):
-        msg = QMessageBox.information(self, '결제금액 경고',
-                                      '결제금액은 0원일 수 없습니다.',
+        msg = QMessageBox.information(self, '결제금액 경고', '결제금액은 0원일 수 없습니다.',
                                       QMessageBox.Ok, QMessageBox.Ok)
 
 
@@ -289,9 +284,30 @@ class SecondTab(QWidget):
     # Groupbox: 주문결제내역
     def createGB0(self):
         gbox = QGroupBox('주문결제내역')
+        vbox = QVBoxLayout()
 
+        self.list = QListWidget()
+        btn_view = QPushButton('내역조회', self)
+
+        vbox.addWidget(btn_view)
+        vbox.addWidget(self.list)
+
+        btn_view.clicked.connect(self.setList)
+
+        gbox.setLayout(vbox)
 
         return gbox
+
+    # List Widget
+    @pyqtSlot()
+    def setList(self):
+        # reset list
+        self.list.clear()
+
+        # set list
+        for i in range(len(order.order_idx_list)):
+            self.list.addItem(str(order.order_idx_list[i]))
+
 
     # Groupbox: 조회
     def createGB1(self):
