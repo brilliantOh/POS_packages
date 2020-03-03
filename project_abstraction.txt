@@ -144,3 +144,12 @@ orderSave : order_df -> order history.xlsx 저장
 btn click -> listwidget clear & addItem (order_idx)
 list가 별로여서 table로 수정할 계획
 그런데 같은 tab이 아니라 payComplete에 연결해서 결제시마다 update가 불가능해보임
+
+#review
+camel case X, 변수와 클래스는 명사, 함수는 동사로 작성
+객체지향적으로 프로그래밍. 메뉴가 늘 때마다 DB에만 추가하고 코드 수정 없도록.
+추가 기능 구현도 물론 의미 있지만 큰 공부가 될 것 같지는 않음
+그보다 내부 자료구조 수정이 기능 추가는 없더라도 공부는 될 것임
+인스턴스를 만들어주는 클래스 생성
+리스트에 str(ex 아메리카노)이 들어오면 해당 수량 카운트하는 식으로 하고
+그 리스트를 다른 함수가 참조하는 걸로 해도 괜찮을 듯
