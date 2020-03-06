@@ -16,7 +16,7 @@ class MyApp(QMainWindow):
 
     def initUI(self):
         self.setWindowTitle(self.title)
-        self.setGeometry(600, 300, 480, 320)
+        self.setGeometry(600, 300, 1024, 300)
 
         widget = MyWidget(self)
         self.setCentralWidget(widget)
@@ -77,9 +77,21 @@ class FirstTab(QWidget):
         vbox.addWidget(self.cart_table)
 
         vbox.addLayout(hbox)
+
+        btn_print_bill = QPushButton('영수증출력', self)
         btn_cancel_all = QPushButton('전체취소', self)
+        btn_pay_in_cash = QPushButton('현금결제', self)
+        btn_pay_in_card = QPushButton('카드결제', self)
+        # Signal
+        btn_print_bill.clicked.connect(self.print_bill_of_recent_order)
         btn_cancel_all.clicked.connect(self.cancel_all_in_cart)
+        btn_pay_in_cash.clicked.connect(self.pay_in_cash)
+        btn_pay_in_card.clicked.connect(self.pay_in_credit_card)
+
+        hbox.addWidget(btn_print_bill)
         hbox.addWidget(btn_cancel_all)
+        hbox.addWidget(btn_pay_in_cash)
+        hbox.addWidget(btn_pay_in_card)
 
         gbox.setLayout(vbox)
 
@@ -111,30 +123,54 @@ class FirstTab(QWidget):
         header_list = ['메뉴', '수량', '감소', '증가', '직접입력', '단가', '금액', '취소']
 
         self.cart_table.setColumnCount(len(header_list))
-        self.cart_table.setRowCount(len(menu_excel['메뉴명']))
+        self.cart_table.setRowCount(len(menu_excel['메뉴명'])+1)
 
         self.cart_table.setHorizontalHeaderLabels(header_list)
+
+        self.cart_table.setItem(4, 0, QTableWidgetItem('Total'))
+        self.cart_table.setItem(4, 1, QTableWidgetItem(str(cal.return_total_qty())))
+        self.cart_table.setItem(4, 6, QTableWidgetItem(str(cal.return_total_amount())))
 
     # Slot
     @pyqtSlot()
     def set_item_in_cart_table(self):
         self.cart_table.clearContents()
 
+        self.cart_table.setItem(4, 0, QTableWidgetItem('Total'))
+        self.cart_table.setItem(4, 1, QTableWidgetItem(str(cal.return_total_qty())))
+        self.cart_table.setItem(4, 6, QTableWidgetItem(str(cal.return_total_amount())))
+
+        btns_minus = []
+        btns_add = []
+        btns_input = []
+        btns_cancel = []
+        row_int = 0
+
         if len(cal.cart_list) != 0:
-            skip_count = 0
             for i in range(len(cal.cart_list)):
-                if i == 0:
-                    self.cart_table.setItem(0, 0, QTableWidgetItem(cal.cart_list[i]))
-                    self.cart_table.setItem(0, 1, QTableWidgetItem(str(cal.return_menu_qty(cal.cart_list[i]))))
-                    self.cart_table.setItem(0, 5, QTableWidgetItem(str(cal.return_menu_cost(cal.cart_list[i]))))
-                    self.cart_table.setItem(0, 6, QTableWidgetItem(str(cal.return_menu_amount(cal.cart_list[i]))))
-                elif i >= 1 and cal.cart_list[i] in cal.cart_list[:i]:
-                    skip_count += 1
-                else:
-                    self.cart_table.setItem(skip_count+1, 0, QTableWidgetItem(cal.cart_list[i]))
-                    self.cart_table.setItem(skip_count+1, 1, QTableWidgetItem(str(cal.return_menu_qty(cal.cart_list[i]))))
-                    self.cart_table.setItem(skip_count+1, 5, QTableWidgetItem(str(cal.return_menu_cost(cal.cart_list[i]))))
-                    self.cart_table.setItem(skip_count+1, 6, QTableWidgetItem(str(cal.return_menu_amount(cal.cart_list[i]))))
+                if cal.cart_list[i] not in cal.cart_list[:i]:
+                    btns_minus.append(QPushButton('-', self))
+                    btns_add.append(QPushButton('+', self))
+                    btns_input.append(QPushButton('수량입력', self))
+                    btns_cancel.append(QPushButton('x', self))
+
+                    self.cart_table.setItem(row_int, 0, QTableWidgetItem(cal.cart_list[i]))
+                    self.cart_table.setItem(row_int, 1, QTableWidgetItem(str(cal.return_menu_qty(cal.cart_list[i]))))
+                    self.cart_table.setItem(row_int, 5, QTableWidgetItem(str(cal.return_menu_cost(cal.cart_list[i]))))
+                    self.cart_table.setItem(row_int, 6, QTableWidgetItem(str(cal.return_menu_amount(cal.cart_list[i]))))
+
+                    self.cart_table.setCellWidget(row_int, 2, btns_minus[row_int])
+                    self.cart_table.setCellWidget(row_int, 3, btns_add[row_int])
+                    self.cart_table.setCellWidget(row_int, 4, btns_input[row_int])
+                    self.cart_table.setCellWidget(row_int, 7, btns_cancel[row_int])
+
+                    # Signal
+                    btns_minus[row_int].clicked.connect(lambda: self.minus_menu_in_cart(cal.cart_list[i]))
+                    btns_add[row_int].clicked.connect(lambda: self.add_menu_in_cart(cal.cart_list[i]))
+                    btns_input[row_int].clicked.connect(lambda: self.input_menu_in_cart(cal.cart_list[i]))
+                    btns_cancel[row_int].clicked.connect(lambda: self.cancel_menu_in_cart(cal.cart_list[i]))
+
+                    row_int += 1
 
     @pyqtSlot(str)
     def add_menu_in_cart(self, menu_str):
@@ -146,10 +182,12 @@ class FirstTab(QWidget):
         cal.minus_qty(menu_str)
         self.set_item_in_cart_table()
 
-    @pyqtSlot(str, int)
-    def input_menu_in_cart(self, menu_str, input_int):
-        cal.input_qty(menu_str, input_int)
-        self.set_item_in_cart_table()
+    @pyqtSlot(str)
+    def input_menu_in_cart(self, menu_str):
+        input_int, ok = QInputDialog.getInt(self, '수량 직접입력', menu_str + '의 수량을 입력하세요.', min=0)
+        if ok:
+            cal.input_qty(menu_str, input_int)
+            self.set_item_in_cart_table()
 
     @pyqtSlot(str)
     def cancel_menu_in_cart(self, menu_str):
@@ -167,11 +205,43 @@ class FirstTab(QWidget):
 
     @pyqtSlot()
     def pay_in_cash(self):
-        pass
+        if len(cal.cart_list) == 0:
+            self.warn_pay_zero()
+        else:
+            cash, ok = QInputDialog.getInt(self, '현금결제', '결제할 금액: ' + \
+                                           str(cal.return_total_amount()) + '원' + '\n' + \
+                                           '받은 금액을 입력하세요.', min=cal.return_total_amount())
+            if ok:
+                reply = QMessageBox.question(self, '현금결제: 거스름돈',
+                                             '결제할 금액: ' + str(cal.return_total_amount()) + '원' + '\n' + \
+                                             '받은 금액: ' + str(cash) + '원' + '\n' + \
+                                             '거스름돈: ' + str(cash - cal.return_total_amount()) + '원' + '\n' + \
+                                             '이대로 결제합니까?',
+                                             QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+                if reply == QMessageBox.Yes:
+                    self.complete_payment('현금')
 
     @pyqtSlot()
     def pay_in_credit_card(self):
-        pass
+        if len(cal.cart_list) == 0:
+            self.warn_pay_zero()
+        else:
+            reply = QMessageBox.question(self, '카드결제',
+                                         '결제할 금액: ' + str(total_amount) + '원' + '\n' + '카드로 결제합니까?',
+                                         QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+            if reply == QMessageBox.Yes:
+                self.complete_payment('카드')
+
+    @pyqtSlot()
+    def warn_pay_zero(self):
+        msg = QMessageBox.information(self, '결제금액 경고', '결제금액은 0원일 수 없습니다.',
+                                      QMessageBox.Ok, QMessageBox.Ok)
+
+    @pyqtSlot(str)
+    def complete_payment(self, payment_method_str):
+        msg = QMessageBox.information(self, '결제완료', '결제수단: ' + payment_method_str + '\n' + \
+                                      '결제가 완료되었습니다.',
+                                      QMessageBox.Ok, QMessageBox.Ok)
 
 
 # Tab Widget: 내역조회

@@ -29,7 +29,10 @@ class POS_calculator:
 
     def input_qty(self, menu_str, input_int):
         while self.cart_list.count(menu_str) != input_int:
-            self.cart_list.append(menu_str)
+            if self.cart_list.count(menu_str) < input_int:
+                self.cart_list.append(menu_str)
+            elif self.cart_list.count(menu_str) > input_int:
+                self.cart_list.remove(menu_str)
         return self.cart_list
 
     def cancel_all_qty(self):
