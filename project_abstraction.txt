@@ -161,3 +161,8 @@ table에 중복 없이 추가 미구현
 
 #0306
 table에 중복 없이 추가 구현
+
+#0309
+Class Receipt 생성
+df로 주문내역을 받고 excel로 save
+index가 0인 내역만 들어가는 오류 발생

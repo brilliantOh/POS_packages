@@ -1,6 +1,7 @@
 #GUI_reform
 
 from initialize_reform import POS_calculator, menu_excel, cal, menu_names_list, menu_cost_dic
+from receipt_draft import Receipt, rec
 import sys
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QTabWidget, QTableWidget, QTableWidgetItem, \
@@ -239,8 +240,8 @@ class FirstTab(QWidget):
 
     @pyqtSlot(str)
     def complete_payment(self, payment_method_str):
-        msg = QMessageBox.information(self, '결제완료', '결제수단: ' + payment_method_str + '\n' + \
-                                      '결제가 완료되었습니다.',
+        rec.receive_order(payment_method_str)
+        msg = QMessageBox.information(self, '결제완료', '결제수단: ' + payment_method_str + '\n' + '결제가 완료되었습니다.',
                                       QMessageBox.Ok, QMessageBox.Ok)
 
 
@@ -262,6 +263,14 @@ class SecondTab(QWidget):
     def create_choice_groupbox(self):
         gbox = QGroupBox()
         gbox.setTitle('주문결제내역')
+        vbox = QVBoxLayout()
+
+        # widget
+        self.order_history_table = QTableWidget()
+        self.create_order_history_table()
+        vbox.addWidget(self.order_history_table)
+
+        gbox.setLayout(vbox)
 
         return gbox
 
@@ -269,8 +278,28 @@ class SecondTab(QWidget):
     def create_view_groupbox(self):
         gbox = QGroupBox()
         gbox.setTitle('조회')
+        vbox = QVBoxLayout()
+
+        # widget
+        self.order_details_table = QTableWidget()
+        self.create_order_details_table()
+        vbox.addWidget(self.order_details_table)
+
+        gbox.setLayout(vbox)
 
         return gbox
+
+    # Table Widget: 조회할 주문 선택
+    def create_order_history_table(self):
+        header_list = ['주문일시', '금액']
+
+        self.order_history_table.setColumnCount(len(header_list))
+        self.order_history_table.setRowCount(1)
+
+    # Table Widget: 상세조회
+    def create_order_details_table(self):
+        self.order_details_table.setColumnCount(len(rec.header_list))
+        self.order_details_table.setRowCount(1)
 
 
 if __name__ == '__main__':
