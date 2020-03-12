@@ -8,6 +8,7 @@ excel_path = r'D:\Documents\repository'
 excel_name = 'menu_excel.xlsx'
 menu_excel = pd.read_excel(excel_path + os.sep + excel_name, index_col=None, header=0)
 
+
 # calculate menu quantity
 class POS_calculator:
     def __init__(self):
@@ -65,7 +66,6 @@ class POS_calculator:
 
 
 cal = POS_calculator()
-
 
 # create variable in convenience
 menu_names_list = []

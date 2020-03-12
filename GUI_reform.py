@@ -1,11 +1,13 @@
-#GUI_reform
+# GUI_reform
 
-from initialize_reform import POS_calculator, menu_excel, cal, menu_names_list, menu_cost_dic
-from receipt_draft import Receipt, rec
 import sys
+
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QTabWidget, QTableWidget, QTableWidgetItem, \
-    QPushButton, QLabel, QGroupBox, QInputDialog, QMessageBox, QHBoxLayout, QVBoxLayout, QGridLayout
+    QPushButton, QGroupBox, QInputDialog, QMessageBox, QHBoxLayout, QVBoxLayout, QGridLayout, QAbstractItemView
+
+from initialize_reform import menu_excel, cal
+from receipt import rec
 
 
 # Main Window
@@ -98,7 +100,6 @@ class FirstTab(QWidget):
 
         return gbox
 
-
     # Groupbox: 메뉴선택
     def create_menu_groupbox(self):
         gbox = QGroupBox()
@@ -124,9 +125,11 @@ class FirstTab(QWidget):
         header_list = ['메뉴', '수량', '감소', '증가', '직접입력', '단가', '금액', '취소']
 
         self.cart_table.setColumnCount(len(header_list))
-        self.cart_table.setRowCount(len(menu_excel['메뉴명'])+1)
+        self.cart_table.setRowCount(len(menu_excel['메뉴명']) + 1)
 
         self.cart_table.setHorizontalHeaderLabels(header_list)
+
+        self.cart_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
         self.cart_table.setItem(4, 0, QTableWidgetItem('Total'))
         self.cart_table.setItem(4, 1, QTableWidgetItem(str(cal.return_total_qty())))
@@ -202,7 +205,7 @@ class FirstTab(QWidget):
 
     @pyqtSlot()
     def print_bill_of_recent_order(self):
-        pass
+        msg = QMessageBox.information(self, '영수증출력', str(rec.receipt_df), QMessageBox.Ok, QMessageBox.Ok)
 
     @pyqtSlot()
     def pay_in_cash(self):
@@ -228,7 +231,7 @@ class FirstTab(QWidget):
             self.warn_pay_zero()
         else:
             reply = QMessageBox.question(self, '카드결제',
-                                         '결제할 금액: ' + str(total_amount) + '원' + '\n' + '카드로 결제합니까?',
+                                         '결제할 금액: ' + str(cal.return_total_amount()) + '원' + '\n' + '카드로 결제합니까?',
                                          QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
             if reply == QMessageBox.Yes:
                 self.complete_payment('카드')
@@ -243,6 +246,7 @@ class FirstTab(QWidget):
         rec.receive_order(payment_method_str)
         msg = QMessageBox.information(self, '결제완료', '결제수단: ' + payment_method_str + '\n' + '결제가 완료되었습니다.',
                                       QMessageBox.Ok, QMessageBox.Ok)
+        self.set_item_in_cart_table()
 
 
 # Tab Widget: 내역조회
@@ -266,6 +270,9 @@ class SecondTab(QWidget):
         vbox = QVBoxLayout()
 
         # widget
+        btn_update = QPushButton('새로고침', self)
+        btn_update.clicked.connect(self.set_item_in_order_history_table)
+        vbox.addWidget(btn_update)
         self.order_history_table = QTableWidget()
         self.create_order_history_table()
         vbox.addWidget(self.order_history_table)
@@ -291,15 +298,54 @@ class SecondTab(QWidget):
 
     # Table Widget: 조회할 주문 선택
     def create_order_history_table(self):
-        header_list = ['주문일시', '금액']
+        self.order_history_table.setColumnCount(len(rec.summary_cols_list))
+        self.order_history_table.setHorizontalHeaderLabels(rec.summary_cols_list)
 
-        self.order_history_table.setColumnCount(len(header_list))
-        self.order_history_table.setRowCount(1)
+        self.order_history_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.order_history_table.setSelectionBehavior(QAbstractItemView.SelectRows)
 
     # Table Widget: 상세조회
     def create_order_details_table(self):
-        self.order_details_table.setColumnCount(len(rec.header_list))
-        self.order_details_table.setRowCount(1)
+        self.order_details_table.setColumnCount(len(rec.details_cols_list))
+        self.order_details_table.setHorizontalHeaderLabels(rec.details_cols_list)
+        self.order_details_table.setRowCount(4)
+
+        self.order_details_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+    def set_item_in_order_history_table(self):
+        self.order_history_table.clearContents()
+        self.order_history_table.setRowCount(rec.summary_ws.max_row - 1)
+
+        order_history_list = []
+        for row in rec.summary_ws.iter_rows(min_row=2, values_only=True):
+            order_history_list.append(row)
+
+        for i in range(rec.summary_ws.max_row - 1):
+            self.order_history_table.setItem(i, 0, QTableWidgetItem(order_history_list[i][0]))
+            self.order_history_table.setItem(i, 1, QTableWidgetItem(str(order_history_list[i][1])))
+            # Signal
+            self.order_history_table.cellClicked.connect(self.set_item_in_order_details_table)
+
+    @pyqtSlot(int, int)
+    def set_item_in_order_details_table(self, row_int, col):
+        self.order_details_table.clearContents()
+
+        order_datetime_list = []
+        order_details_list = []
+        for row in rec.details_ws.iter_rows(min_row=2, values_only=True):
+            order_datetime_list.append(row[0])
+            order_details_list.append(row)
+
+        order_datetime = rec.summary_ws['A'][row_int + 1].value
+        self.order_details_table.setRowCount(order_datetime_list.count(order_datetime))
+
+        for i in range(self.order_details_table.rowCount()):
+            self.order_details_table.setItem(i, 0, QTableWidgetItem(order_datetime_list[i]))
+            self.order_details_table.setItem(i, 1, QTableWidgetItem(order_details_list[i][1]))
+            self.order_details_table.setItem(i, 2, QTableWidgetItem(str(order_details_list[i][2])))
+            self.order_details_table.setItem(i, 3, QTableWidgetItem(str(order_details_list[i][3])))
+            self.order_details_table.setItem(i, 4, QTableWidgetItem(str(order_details_list[i][4])))
+            self.order_details_table.setItem(i, 5, QTableWidgetItem(order_details_list[i][5]))
 
 
 if __name__ == '__main__':

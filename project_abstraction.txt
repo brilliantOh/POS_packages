@@ -166,3 +166,8 @@ table에 중복 없이 추가 구현
 Class Receipt 생성
 df로 주문내역을 받고 excel로 save
 index가 0인 내역만 들어가는 오류 발생
+
+#0312
+주문내역 저장 및 조회 기능 구현
+excel에서 list로 먼저 불러오고 table에서 참조하므로 다소 비효율적
+data가 늘어났을 때 문제 가능성
