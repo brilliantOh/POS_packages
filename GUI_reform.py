@@ -2,12 +2,14 @@
 
 import sys
 
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, QDate
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QTabWidget, QTableWidget, QTableWidgetItem, \
-    QPushButton, QGroupBox, QInputDialog, QMessageBox, QHBoxLayout, QVBoxLayout, QGridLayout, QAbstractItemView
+    QPushButton, QGroupBox, QInputDialog, QMessageBox, QHBoxLayout, QVBoxLayout, QGridLayout, QAbstractItemView, \
+    QDateEdit, QLabel
 
 from initialize_reform import menu_excel, cal
 from receipt import rec
+from sales_stats import stats
 
 
 # Main Window
@@ -47,6 +49,7 @@ class MyWidget(QWidget):
 
         tabs.addTab(FirstTab(), '주문/계산')
         tabs.addTab(SecondTab(), '내역조회')
+        tabs.addTab(ThirdTab(), '매출집계')
 
         vbox.addWidget(tabs)
 
@@ -323,8 +326,8 @@ class SecondTab(QWidget):
         for i in range(rec.summary_ws.max_row - 1):
             self.order_history_table.setItem(i, 0, QTableWidgetItem(order_history_list[i][0]))
             self.order_history_table.setItem(i, 1, QTableWidgetItem(str(order_history_list[i][1])))
-            # Signal
-            self.order_history_table.cellClicked.connect(self.set_item_in_order_details_table)
+        # Signal
+        self.order_history_table.cellClicked.connect(self.set_item_in_order_details_table)
 
     @pyqtSlot(int, int)
     def set_item_in_order_details_table(self, row_int, col):
@@ -337,15 +340,97 @@ class SecondTab(QWidget):
             order_details_list.append(row)
 
         order_datetime = rec.summary_ws['A'][row_int + 1].value
-        self.order_details_table.setRowCount(order_datetime_list.count(order_datetime))
+        order_index = order_datetime_list.index(order_datetime)
+        order_count = order_datetime_list.count(order_datetime)
+        self.order_details_table.setRowCount(order_count)
+        order_details_2_list = order_details_list[order_index: order_index + order_count]
 
-        for i in range(self.order_details_table.rowCount()):
-            self.order_details_table.setItem(i, 0, QTableWidgetItem(order_datetime_list[i]))
-            self.order_details_table.setItem(i, 1, QTableWidgetItem(order_details_list[i][1]))
-            self.order_details_table.setItem(i, 2, QTableWidgetItem(str(order_details_list[i][2])))
-            self.order_details_table.setItem(i, 3, QTableWidgetItem(str(order_details_list[i][3])))
-            self.order_details_table.setItem(i, 4, QTableWidgetItem(str(order_details_list[i][4])))
-            self.order_details_table.setItem(i, 5, QTableWidgetItem(order_details_list[i][5]))
+        for i in range(order_count):
+            self.order_details_table.setItem(i, 0, QTableWidgetItem(order_details_2_list[i][0]))
+            self.order_details_table.setItem(i, 1, QTableWidgetItem(order_details_2_list[i][1]))
+            self.order_details_table.setItem(i, 2, QTableWidgetItem(str(order_details_2_list[i][2])))
+            self.order_details_table.setItem(i, 3, QTableWidgetItem(str(order_details_2_list[i][3])))
+            self.order_details_table.setItem(i, 4, QTableWidgetItem(str(order_details_2_list[i][4])))
+            self.order_details_table.setItem(i, 5, QTableWidgetItem(order_details_2_list[i][5]))
+
+
+# Tab Widget : 매출집계
+class ThirdTab(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        grid = QGridLayout()
+
+        grid.addWidget(self.create_choice_groupbox(), 0, 0)
+        grid.addWidget(self.create_view_groupbox(), 0, 1)
+
+        self.setLayout(grid)
+
+    # Groupbox : 기간 선택
+    def create_choice_groupbox(self):
+        gbox = QGroupBox()
+        hbox = QHBoxLayout()
+        vbox = QVBoxLayout()
+        hbox2 = QHBoxLayout()
+
+        qdate_today = QDate.currentDate()
+        self.start_date = qdate_today
+        self.end_date = qdate_today
+        # widget
+        lbl_period = QLabel('조회기간')
+        self.dateed_start = QDateEdit()
+        lbl_mark = QLabel('~')
+        self.dateed_end = QDateEdit()
+        self.dateed_start.setDate(self.start_date)
+        self.dateed_end.setDate(self.end_date)
+        self.dateed_start.setCalendarPopup(True)
+        self.dateed_end.setCalendarPopup(True)
+        btn_week = QPushButton('1주')
+        btn_view = QPushButton('조회')
+        # Signal
+        self.dateed_start.dateChanged.connect(self.change_start_date)
+        self.dateed_end.dateChanged.connect(self.change_end_date)
+        btn_week.clicked.connect(self.change_week_period)
+        btn_view.clicked.connect(self.lookup_period_sales)
+
+        hbox.addWidget(lbl_period)
+        hbox.addWidget(self.dateed_start)
+        hbox.addWidget(lbl_mark)
+        hbox.addWidget(self.dateed_end)
+        hbox2.addWidget(btn_week)
+        hbox2.addWidget(btn_view)
+        vbox.addLayout(hbox)
+        vbox.addLayout(hbox2)
+        gbox.setLayout(vbox)
+
+        return gbox
+
+    # Groupbox : 조회
+    def create_view_groupbox(self):
+        gbox = QGroupBox()
+        return gbox
+
+    @pyqtSlot(QDate)
+    def change_start_date(self, date_start):
+        stats.date_start = date_start.toPyDate()
+        self.start_date = date_start
+        return self.start_date
+
+    @pyqtSlot(QDate)
+    def change_end_date(self, date_end):
+        stats.date_end = date_end.toPyDate()
+        self.end_date = date_end
+        return self.end_date
+
+    @pyqtSlot()
+    def change_week_period(self):
+        self.dateed_start.setDate(self.end_date.addDays(-6))
+        self.change_start_date(self.end_date.addDays(-6))
+
+    def lookup_period_sales(self):
+        pass
 
 
 if __name__ == '__main__':
