@@ -375,23 +375,18 @@ class ThirdTab(QWidget):
         vbox = QVBoxLayout()
         hbox2 = QHBoxLayout()
 
-        qdate_today = QDate.currentDate()
-        self.start_date = qdate_today
-        self.end_date = qdate_today
         # widget
         lbl_period = QLabel('조회기간')
         self.dateed_start = QDateEdit()
         lbl_mark = QLabel('~')
         self.dateed_end = QDateEdit()
-        self.dateed_start.setDate(self.start_date)
-        self.dateed_end.setDate(self.end_date)
+        self.dateed_start.setDate(QDate.currentDate())
+        self.dateed_end.setDate(QDate.currentDate())
         self.dateed_start.setCalendarPopup(True)
         self.dateed_end.setCalendarPopup(True)
         btn_week = QPushButton('1주')
         btn_view = QPushButton('조회')
         # Signal
-        self.dateed_start.dateChanged.connect(self.change_start_date)
-        self.dateed_end.dateChanged.connect(self.change_end_date)
         btn_week.clicked.connect(self.change_week_period)
         btn_view.clicked.connect(self.lookup_period_sales)
 
@@ -412,25 +407,22 @@ class ThirdTab(QWidget):
         gbox = QGroupBox()
         return gbox
 
-    @pyqtSlot(QDate)
-    def change_start_date(self, date_start):
-        stats.date_start = date_start.toPyDate()
-        self.start_date = date_start
-        return self.start_date
-
-    @pyqtSlot(QDate)
-    def change_end_date(self, date_end):
-        stats.date_end = date_end.toPyDate()
-        self.end_date = date_end
-        return self.end_date
 
     @pyqtSlot()
     def change_week_period(self):
-        self.dateed_start.setDate(self.end_date.addDays(-6))
-        self.change_start_date(self.end_date.addDays(-6))
+        self.dateed_start.setDate(self.dateed_end.date().addDays(-6))
 
+    @pyqtSlot()
     def lookup_period_sales(self):
-        pass
+        if self.dateed_end.date() < self.dateed_start.date():
+            self.warn_period()
+        else:
+            stats.stats_period_sales(self.dateed_start.date().toPyDate(), self.dateed_end.date().toPyDate())
+
+    @pyqtSlot()
+    def warn_period(self):
+        msg = QMessageBox.information(self, '조회기간 경고', '시작일이 종료일보다 나중입니다.',
+                                      QMessageBox.Ok, QMessageBox.Ok)
 
 
 if __name__ == '__main__':
