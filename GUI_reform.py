@@ -5,11 +5,13 @@ import sys
 from PyQt5.QtCore import pyqtSlot, QDate
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QTabWidget, QTableWidget, QTableWidgetItem, \
     QPushButton, QGroupBox, QInputDialog, QMessageBox, QHBoxLayout, QVBoxLayout, QGridLayout, QAbstractItemView, \
-    QDateEdit, QLabel
+    QDateEdit, QLabel, QComboBox
 
 from initialize_reform import menu_excel, cal
 from receipt import rec
-from sales_stats import stats
+from sales_stats import Sales_statistics, stats
+from practice import PlotCanvas
+
 
 
 # Main Window
@@ -405,6 +407,18 @@ class ThirdTab(QWidget):
     # Groupbox : 조회
     def create_view_groupbox(self):
         gbox = QGroupBox()
+        vbox = QVBoxLayout()
+        # widget
+        '''cbox = QComboBox()
+        cbox.addItem('매출건수')
+        cbox.addItem('매출수량')
+        cbox.addItem('매출총액')
+        cbox.activated[str].connect()'''
+        self.canvas = PlotCanvas(self, width=5, height=4)
+        vbox.addWidget(self.canvas)
+
+        gbox.setLayout(vbox)
+
         return gbox
 
 
@@ -418,10 +432,11 @@ class ThirdTab(QWidget):
             self.warn_period()
         else:
             stats.stats_period_sales(self.dateed_start.date().toPyDate(), self.dateed_end.date().toPyDate())
+            self.canvas.plot()
 
     @pyqtSlot()
     def warn_period(self):
-        msg = QMessageBox.information(self, '조회기간 경고', '시작일이 종료일보다 나중입니다.',
+        msg = QMessageBox.information(self, '조회기간 경고', '시작일은 종료일보다 나중일 수 없습니다.',
                                       QMessageBox.Ok, QMessageBox.Ok)
 
 
