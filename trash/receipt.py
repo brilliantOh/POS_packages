@@ -1,14 +1,14 @@
-# receipt.py
+# receipt_draft.py
 
 import pandas as pd
 import openpyxl as xl
+from initialize_reform import POS_calculator, cal
 from datetime import datetime
 from openpyxl.utils.dataframe import dataframe_to_rows
-from calculator import POS_calculator, cal
 
 
 # receive order and save data(excel)
-class POS_receipt:
+class Receipt:
     def __init__(self):
         self.details_cols_list = ['주문일시', '메뉴', '수량', '단가', '금액', '지불수단']
         self.receipt_df = pd.DataFrame(columns=self.details_cols_list)
@@ -16,7 +16,7 @@ class POS_receipt:
         self.summary_cols_list = ['주문일시', '금액']
         self.summary_df = pd.DataFrame(columns=self.summary_cols_list)
 
-        self.wb_filename = r'C:\Users\JH\POS_packages\order_history.xlsx'
+        self.wb_filename = 'order_history.xlsx'
 
         try:
             self.wb = xl.load_workbook(filename=self.wb_filename)
@@ -71,4 +71,4 @@ class POS_receipt:
             self.wb.save(filename=self.wb_filename)
 
 
-rec = POS_receipt()
+rec = Receipt()

@@ -1,11 +1,9 @@
 # sales_stats.py
-
-
 from datetime import date, timedelta
 import pandas as pd
 
 
-class POS_statistics:
+class Sales_statistics:
     def __init__(self):
         self.stats_cols_list = ['매출일시', '매출건수', '매출수량', '매출총액', '현금매출', '카드매출']
         self.stats_df = pd.DataFrame(columns=self.stats_cols_list)
@@ -13,8 +11,8 @@ class POS_statistics:
     def stats_period_sales(self, start_date, end_date):
         self.stats_df = pd.DataFrame(columns=self.stats_cols_list)
 
-        details_df = pd.read_excel(r'C:\Users\JH\POS_packages\order_history.xlsx', sheet_name='receipt')
-        summary_df = pd.read_excel(r'C:\Users\JH\POS_packages\order_history.xlsx', sheet_name='summary')
+        details_df = pd.read_excel('order_history.xlsx', sheet_name='receipt')
+        summary_df = pd.read_excel('order_history.xlsx', sheet_name='summary')
         period_int = (end_date - start_date).days
 
         for i in range(period_int + 1):
@@ -37,4 +35,4 @@ class POS_statistics:
         return self.stats_df
 
 
-stats = POS_statistics()
+stats = Sales_statistics()
