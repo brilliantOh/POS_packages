@@ -1,0 +1,533 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>POS_packages &mdash; POS_packages 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to POS_packages’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> POS_packages
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">POS_packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#calculator-py">calculator.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#receipt-py">receipt.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sales-stats-py">sales_stats.py</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">POS_packages</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>POS_packages</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/POS_packages.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-calculator">
+<span id="pos-packages"></span><h1>POS_packages<a class="headerlink" href="#module-calculator" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="calculator-py">
+<h2>calculator.py<a class="headerlink" href="#calculator-py" title="Permalink to this headline">¶</a></h2>
+<p>calculation module of POS_packages</p>
+<dl class="class">
+<dt id="calculator.POS_calculator">
+<em class="property">class </em><code class="descclassname">calculator.</code><code class="descname">POS_calculator</code><a class="headerlink" href="#calculator.POS_calculator" title="Permalink to this definition">¶</a></dt>
+<dd><p>POS의 메뉴 추가/감소/취소 기능을 하는 클래스입니다.</p>
+<dl class="method">
+<dt id="calculator.POS_calculator.add_qty">
+<code class="descname">add_qty</code><span class="sig-paren">(</span><em>menu_str</em><span class="sig-paren">)</span><a class="headerlink" href="#calculator.POS_calculator.add_qty" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Explain:</th><td class="field-body">입력한 메뉴를 장바구니에 한 번 추가합니다.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>menu_str</strong> (<em>string</em>) – 메뉴 이름</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return list:</th><td class="field-body">장바구니</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">add_qty</span><span class="p">(</span><span class="s1">&#39;아메리카노(ICE)&#39;</span><span class="p">)</span>
+<span class="go">[&#39;아메리카노(ICE)&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">add_qty</span><span class="p">(</span><span class="s1">&#39;카페라떼(ICE)&#39;</span><span class="p">)</span>
+<span class="go">[&#39;아메리카노(ICE)&#39;, &#39;카페라떼(ICE)&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">add_qty</span><span class="p">(</span><span class="s1">&#39;카페라떼(ICE)&#39;</span><span class="p">)</span>
+<span class="go">[&#39;아메리카노(ICE)&#39;, &#39;카페라떼(ICE)&#39;, &#39;카페라떼(ICE)&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="calculator.POS_calculator.cancel_all_qty">
+<code class="descname">cancel_all_qty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calculator.POS_calculator.cancel_all_qty" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Explain:</th><td class="field-body">장바구니를 비웁니다.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return list:</th><td class="field-body">장바구니</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">cancel_all_qty</span><span class="p">()</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="calculator.POS_calculator.cancel_qty">
+<code class="descname">cancel_qty</code><span class="sig-paren">(</span><em>menu_str</em><span class="sig-paren">)</span><a class="headerlink" href="#calculator.POS_calculator.cancel_qty" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Explain:</th><td class="field-body">입력한 메뉴가 장바구니에 있다면 모두 제거합니다.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>menu_str</strong> (<em>string</em>) – 메뉴 이름</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return list:</th><td class="field-body">장바구니</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">cancel_qty</span><span class="p">(</span><span class="s1">&#39;카페라떼(ICE)&#39;</span><span class="p">)</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="calculator.POS_calculator.input_qty">
+<code class="descname">input_qty</code><span class="sig-paren">(</span><em>menu_str</em>, <em>input_int</em><span class="sig-paren">)</span><a class="headerlink" href="#calculator.POS_calculator.input_qty" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Explain:</th><td class="field-body"><p class="first">입력한 메뉴가 입력값이 되도록 장바구니에 추가/제거합니다. 입력값보다 기존 수량이 작으면 더하고, 크면 줄입니다.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>menu_str</strong> (<em>string</em>) – 메뉴 이름</li>
+<li><strong>input_int</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – 메뉴 수량</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return list:</th><td class="field-body"><p class="first last">장바구니</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">input_qty</span><span class="p">(</span><span class="s1">&#39;아메리카노(ICE)&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">[&#39;아메리카노(ICE)&#39;, &#39;아메리카노(ICE)&#39;, &#39;아메리카노(ICE)&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="calculator.POS_calculator.minus_qty">
+<code class="descname">minus_qty</code><span class="sig-paren">(</span><em>menu_str</em><span class="sig-paren">)</span><a class="headerlink" href="#calculator.POS_calculator.minus_qty" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Explain:</th><td class="field-body">입력한 메뉴가 장바구니에 있다면 한 번 제거합니다.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>menu_str</strong> (<em>string</em>) – 메뉴 이름</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return list:</th><td class="field-body">장바구니</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">minus_qty</span><span class="p">(</span><span class="s1">&#39;아메리카노(ICE)&#39;</span><span class="p">)</span>
+<span class="go">[&#39;카페라떼(ICE)&#39;, &#39;카페라떼(ICE)&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="calculator.POS_calculator.return_menu_amount">
+<code class="descname">return_menu_amount</code><span class="sig-paren">(</span><em>menu_str</em><span class="sig-paren">)</span><a class="headerlink" href="#calculator.POS_calculator.return_menu_amount" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Explain:</th><td class="field-body">입력한 메뉴의 단가와 수량을 곱한 값을 반환합니다. 메뉴 정보가 있는 dataframe(menu_excel)에서 입력한 메뉴의 가격 col을 찾아 장바구니의 수량만큼 곱합니다.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>menu_str</strong> (<em>string</em>) – 메뉴 이름</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return int:</th><td class="field-body">메뉴 금액</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">return_menu_qty</span><span class="p">(</span><span class="s1">&#39;아메리카노(ICE)&#39;</span><span class="p">)</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">return_menu_amount</span><span class="p">(</span><span class="s1">&#39;아메리카노(ICE)&#39;</span><span class="p">)</span>
+<span class="go">8000</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="calculator.POS_calculator.return_menu_cost">
+<code class="descname">return_menu_cost</code><span class="sig-paren">(</span><em>menu_str</em><span class="sig-paren">)</span><a class="headerlink" href="#calculator.POS_calculator.return_menu_cost" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Explain:</th><td class="field-body">입력한 메뉴의 단가를 반환합니다. 메뉴 정보가 있는 dataframe(menu_excel)에서 입력한 메뉴의 가격 col을 찾습니다.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>menu_str</strong> (<em>string</em>) – 메뉴 이름</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return int:</th><td class="field-body">메뉴 가격</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">return_menu_cost</span><span class="p">(</span><span class="s1">&#39;아메리카노(ICE)&#39;</span><span class="p">)</span>
+<span class="go">4000</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="calculator.POS_calculator.return_menu_qty">
+<code class="descname">return_menu_qty</code><span class="sig-paren">(</span><em>menu_str</em><span class="sig-paren">)</span><a class="headerlink" href="#calculator.POS_calculator.return_menu_qty" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Explain:</th><td class="field-body">입력한 메뉴의 수량을 반환합니다.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>menu_str</strong> (<em>string</em>) – 메뉴 이름</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return int:</th><td class="field-body">메뉴 수량</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">return_menu_qty</span><span class="p">(</span><span class="s1">&#39;아메리카노(ICE)&#39;</span><span class="p">)</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="calculator.POS_calculator.return_total_amount">
+<code class="descname">return_total_amount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calculator.POS_calculator.return_total_amount" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Explain:</th><td class="field-body">현재 장바구니에 있는 메뉴들의 금액을 합한 값을 반환합니다.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return int:</th><td class="field-body">총 금액</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">cart_list</span>
+<span class="go">[&#39;아메리카노(ICE)&#39;, &#39;카페라떼(ICE)&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">return_total_amount</span><span class="p">()</span>
+<span class="go">8500</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="calculator.POS_calculator.return_total_qty">
+<code class="descname">return_total_qty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calculator.POS_calculator.return_total_qty" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Explain:</th><td class="field-body">현재 장바구니에 있는 메뉴들의 수량을 합한 값을 반환합니다.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return int:</th><td class="field-body">총 수량</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-receipt"></span><div class="section" id="receipt-py">
+<h2>receipt.py<a class="headerlink" href="#receipt-py" title="Permalink to this headline">¶</a></h2>
+<p>order management module of POS_packages</p>
+<dl class="class">
+<dt id="receipt.POS_receipt">
+<em class="property">class </em><code class="descclassname">receipt.</code><code class="descname">POS_receipt</code><a class="headerlink" href="#receipt.POS_receipt" title="Permalink to this definition">¶</a></dt>
+<dd><p>POS의 주문 기능, 주문내역 저장(excel) 기능을 하는 클래스입니다.</p>
+<dl class="method">
+<dt id="receipt.POS_receipt.create_summary_df">
+<code class="descname">create_summary_df</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#receipt.POS_receipt.create_summary_df" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Explain:</th><td class="field-body">요약내역 dataframe을 생성하고 반환합니다.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Return dataframe:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">summary_df 요약내역</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="receipt.POS_receipt.receive_order">
+<code class="descname">receive_order</code><span class="sig-paren">(</span><em>payment_method_str</em><span class="sig-paren">)</span><a class="headerlink" href="#receipt.POS_receipt.receive_order" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Explain:</th><td class="field-body">입력한 지불수단에 따른 주문내역 dataframe을 생성하고 반환합니다. 장바구니 비우기, 요약내역 생성, excel에 저장하는 함수를 호출합니다.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>payment_method_str</strong> (<em>string</em>) – 지불수단</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Return dataframe:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">receipt_df 주문내역</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="receipt.POS_receipt.save_receipt_df_to_excel">
+<code class="descname">save_receipt_df_to_excel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#receipt.POS_receipt.save_receipt_df_to_excel" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Explain:</th><td class="field-body">주문내역 dataframe을 excel로 저장합니다.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="receipt.POS_receipt.save_summary_df_to_excel">
+<code class="descname">save_summary_df_to_excel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#receipt.POS_receipt.save_summary_df_to_excel" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Explain:</th><td class="field-body">요약내역 dataframe을 excel로 저장합니다.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-sales_stats"></span><div class="section" id="sales-stats-py">
+<h2>sales_stats.py<a class="headerlink" href="#sales-stats-py" title="Permalink to this headline">¶</a></h2>
+<p>statistics module of POS_packages</p>
+<dl class="class">
+<dt id="sales_stats.POS_statistics">
+<em class="property">class </em><code class="descclassname">sales_stats.</code><code class="descname">POS_statistics</code><a class="headerlink" href="#sales_stats.POS_statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>POS의 매출집계를 하는 클래스입니다.</p>
+<dl class="method">
+<dt id="sales_stats.POS_statistics.stats_period_sales">
+<code class="descname">stats_period_sales</code><span class="sig-paren">(</span><em>start_date</em>, <em>end_date</em><span class="sig-paren">)</span><a class="headerlink" href="#sales_stats.POS_statistics.stats_period_sales" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Explain:</th><td class="field-body"><p class="first">입력한 시작일부터 종료일까지 기간의 매출집계</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start_date</strong> (<em>date</em>) – 시작일</li>
+<li><strong>end_date</strong> (<em>date</em>) – 종료일</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Return dataframe:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first last">stats_df 기간별 매출집계</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to POS_packages’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, brilliantOh
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

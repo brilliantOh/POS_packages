@@ -181,3 +181,8 @@ data가 늘어났을 때 문제 가능성
 timedelta를 이용해 시작일-종료일 차이만큼 for loop
 xlsx에서 조회일의 데이터를 df로 읽고 추출해서 주문건수,주문수량,주문금액 리스트로 저장
 리스트를 불러와서 matplotlib로 뿌릴 예정
+
+#0403
+sphinx를 통한 문서화(POS_packages.html)
+matplotlib bar graph
+매출세부내역 table 추가

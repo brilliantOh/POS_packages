@@ -1,16 +1,28 @@
-# sales_stats.py
-
-
+'''
+sales_stats.py
+=========================
+statistics module of POS_packages
+'''
 from datetime import date, timedelta
 import pandas as pd
 
 
 class POS_statistics:
+    '''
+    POS의 매출집계를 하는 클래스입니다.
+    '''
     def __init__(self):
         self.stats_cols_list = ['매출일시', '매출건수', '매출수량', '매출총액', '현금매출', '카드매출']
         self.stats_df = pd.DataFrame(columns=self.stats_cols_list)
 
     def stats_period_sales(self, start_date, end_date):
+        '''
+        :explain: 입력한 시작일부터 종료일까지 기간의 매출집계
+
+        :param date start_date: 시작일
+        :param date end_date: 종료일
+        :return dataframe: stats_df 기간별 매출집계
+        '''
         self.stats_df = pd.DataFrame(columns=self.stats_cols_list)
 
         details_df = pd.read_excel(r'C:\Users\JH\POS_packages\order_history.xlsx', sheet_name='receipt')

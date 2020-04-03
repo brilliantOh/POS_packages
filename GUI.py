@@ -6,11 +6,19 @@ from PyQt5.QtCore import pyqtSlot, QDate
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QTabWidget, QTableWidget, QTableWidgetItem, \
     QPushButton, QGroupBox, QInputDialog, QMessageBox, QHBoxLayout, QVBoxLayout, QGridLayout, QAbstractItemView, \
     QDateEdit, QLabel
+from PyQt5.QtGui import QIcon
+
+import matplotlib.pyplot as plt
+from matplotlib import font_manager, rc
 
 from calculator import POS_calculator, cal, menu_excel
 from receipt import POS_receipt, rec
 from sales_stats import POS_statistics, stats
 
+
+# matplotlib font(Korean)
+font_name = font_manager.FontProperties(fname='C:\Windows\Fonts\malgun.ttf').get_name()
+rc('font', family=font_name)
 
 # Main Window
 class MyApp(QMainWindow):
@@ -22,6 +30,7 @@ class MyApp(QMainWindow):
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(600, 300, 1024, 300)
+        self.setWindowIcon(QIcon(r'C:\Users\JH\POS_packages\image_icon.jpg'))
 
         widget = MyWidget(self)
         self.setCentralWidget(widget)
@@ -129,23 +138,22 @@ class FirstTab(QWidget):
 
         self.cart_table.setColumnCount(len(header_list))
         self.cart_table.setRowCount(len(menu_excel['메뉴명']) + 1)
-
         self.cart_table.setHorizontalHeaderLabels(header_list)
 
-        self.cart_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.cart_table.setItem(len(menu_excel['메뉴명']), 0, QTableWidgetItem('Total'))
+        self.cart_table.setItem(len(menu_excel['메뉴명']), 1, QTableWidgetItem(str(cal.return_total_qty())))
+        self.cart_table.setItem(len(menu_excel['메뉴명']), 6, QTableWidgetItem(str(cal.return_total_amount())))
 
-        self.cart_table.setItem(4, 0, QTableWidgetItem('Total'))
-        self.cart_table.setItem(4, 1, QTableWidgetItem(str(cal.return_total_qty())))
-        self.cart_table.setItem(4, 6, QTableWidgetItem(str(cal.return_total_amount())))
+        self.cart_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
     # Slot
     @pyqtSlot()
     def set_item_in_cart_table(self):
         self.cart_table.clearContents()
 
-        self.cart_table.setItem(4, 0, QTableWidgetItem('Total'))
-        self.cart_table.setItem(4, 1, QTableWidgetItem(str(cal.return_total_qty())))
-        self.cart_table.setItem(4, 6, QTableWidgetItem(str(cal.return_total_amount())))
+        self.cart_table.setItem(len(menu_excel['메뉴명']), 0, QTableWidgetItem('Total'))
+        self.cart_table.setItem(len(menu_excel['메뉴명']), 1, QTableWidgetItem(str(cal.return_total_qty())))
+        self.cart_table.setItem(len(menu_excel['메뉴명']), 6, QTableWidgetItem(str(cal.return_total_amount())))
 
         btns_minus = []
         btns_add = []
@@ -274,8 +282,10 @@ class SecondTab(QWidget):
 
         # widget
         btn_update = QPushButton('새로고침', self)
-        btn_update.clicked.connect(self.set_item_in_order_history_table)
         vbox.addWidget(btn_update)
+        # Signal
+        btn_update.clicked.connect(self.set_item_in_order_history_table)
+
         self.order_history_table = QTableWidget()
         self.create_order_history_table()
         vbox.addWidget(self.order_history_table)
@@ -306,12 +316,13 @@ class SecondTab(QWidget):
 
         self.order_history_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.order_history_table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.order_history_table.setSelectionMode(QAbstractItemView.SingleSelection)
 
     # Table Widget: 상세조회
     def create_order_details_table(self):
         self.order_details_table.setColumnCount(len(rec.details_cols_list))
         self.order_details_table.setHorizontalHeaderLabels(rec.details_cols_list)
-        self.order_details_table.setRowCount(4)
+        self.order_details_table.setRowCount(len(menu_excel['메뉴명']))
 
         self.order_details_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
@@ -405,8 +416,13 @@ class ThirdTab(QWidget):
     # Groupbox : 조회
     def create_view_groupbox(self):
         gbox = QGroupBox()
+        gbox.setTitle('조회')
         vbox = QVBoxLayout()
 
+        # widget
+        self.sales_stats_table = QTableWidget()
+        self.create_sales_stats_table()
+        vbox.addWidget(self.sales_stats_table)
         gbox.setLayout(vbox)
 
         return gbox
@@ -422,12 +438,34 @@ class ThirdTab(QWidget):
             self.warn_period()
         else:
             stats.stats_period_sales(self.dateed_start.date().toPyDate(), self.dateed_end.date().toPyDate())
-            msg = QMessageBox.information(self, '기간별 매출집계', str(stats.stats_df), QMessageBox.Ok, QMessageBox.Ok)
+            self.set_item_in_sales_stats_table()
+
+            ax = stats.stats_df.plot(kind='bar', title='기간별 매출액 비교', rot=0,
+                                     x='매출일시', y=['매출총액', '현금매출', '카드매출'],
+                                     color=['royalblue', 'darkslateblue', 'slateblue'])
+            plt.show()
 
     @pyqtSlot()
     def warn_period(self):
         msg = QMessageBox.information(self, '조회기간 경고', '시작일은 종료일보다 나중일 수 없습니다.',
                                       QMessageBox.Ok, QMessageBox.Ok)
+
+    def create_sales_stats_table(self):
+        self.sales_stats_table.setColumnCount(len(stats.stats_cols_list))
+        self.sales_stats_table.setHorizontalHeaderLabels(stats.stats_cols_list)
+        self.sales_stats_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+    def set_item_in_sales_stats_table(self):
+        self.sales_stats_table.clearContents()
+        self.sales_stats_table.setRowCount(self.dateed_start.date().daysTo(self.dateed_end.date()) + 1)
+
+        for i in range(self.sales_stats_table.rowCount()):
+            self.sales_stats_table.setItem(i, 0, QTableWidgetItem(stats.stats_df['매출일시'][i]))
+            self.sales_stats_table.setItem(i, 1, QTableWidgetItem(str(stats.stats_df['매출건수'][i])))
+            self.sales_stats_table.setItem(i, 2, QTableWidgetItem(str(stats.stats_df['매출수량'][i])))
+            self.sales_stats_table.setItem(i, 3, QTableWidgetItem(str(stats.stats_df['매출총액'][i])))
+            self.sales_stats_table.setItem(i, 4, QTableWidgetItem(str(stats.stats_df['현금매출'][i])))
+            self.sales_stats_table.setItem(i, 5, QTableWidgetItem(str(stats.stats_df['카드매출'][i])))
 
 
 if __name__ == '__main__':
