@@ -198,7 +198,9 @@
 </tr>
 </tbody>
 </table>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">cancel_all_qty</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">cart_list</span>
+<span class="go">[&#39;카페라떼(ICE)&#39;, &#39;아메리카노(ICE)&#39;, &#39;아메리카노(ICE)&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">cancel_all_qty</span><span class="p">()</span>
 <span class="go">[]</span>
 </pre></div>
 </div>
@@ -219,7 +221,9 @@
 </tr>
 </tbody>
 </table>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">cancel_qty</span><span class="p">(</span><span class="s1">&#39;카페라떼(ICE)&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">cart_list</span>
+<span class="go">[&#39;카페라떼(ICE)&#39;, &#39;카페라떼(ICE)&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">cancel_qty</span><span class="p">(</span><span class="s1">&#39;카페라떼(ICE)&#39;</span><span class="p">)</span>
 <span class="go">[]</span>
 </pre></div>
 </div>
@@ -246,7 +250,9 @@
 </tr>
 </tbody>
 </table>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">input_qty</span><span class="p">(</span><span class="s1">&#39;아메리카노(ICE)&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">cart_list</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">input_qty</span><span class="p">(</span><span class="s1">&#39;아메리카노(ICE)&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="go">[&#39;아메리카노(ICE)&#39;, &#39;아메리카노(ICE)&#39;, &#39;아메리카노(ICE)&#39;]</span>
 </pre></div>
 </div>
@@ -267,7 +273,9 @@
 </tr>
 </tbody>
 </table>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">minus_qty</span><span class="p">(</span><span class="s1">&#39;아메리카노(ICE)&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">cart_list</span>
+<span class="go">[&#39;아메리카노(ICE)&#39;, &#39;카페라떼(ICE)&#39;, &#39;카페라떼(ICE)&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">minus_qty</span><span class="p">(</span><span class="s1">&#39;아메리카노(ICE)&#39;</span><span class="p">)</span>
 <span class="go">[&#39;카페라떼(ICE)&#39;, &#39;카페라떼(ICE)&#39;]</span>
 </pre></div>
 </div>
@@ -288,8 +296,8 @@
 </tr>
 </tbody>
 </table>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">return_menu_qty</span><span class="p">(</span><span class="s1">&#39;아메리카노(ICE)&#39;</span><span class="p">)</span>
-<span class="go">2</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">cart_list</span>
+<span class="go">[&#39;카페라떼(ICE)&#39;, &#39;아메리카노(ICE)&#39;, &#39;아메리카노(ICE)&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">return_menu_amount</span><span class="p">(</span><span class="s1">&#39;아메리카노(ICE)&#39;</span><span class="p">)</span>
 <span class="go">8000</span>
 </pre></div>
@@ -332,8 +340,10 @@
 </tr>
 </tbody>
 </table>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">return_menu_qty</span><span class="p">(</span><span class="s1">&#39;아메리카노(ICE)&#39;</span><span class="p">)</span>
-<span class="go">0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">cart_list</span>
+<span class="go">[&#39;카페라떼(ICE)&#39;, &#39;아메리카노(ICE)&#39;, &#39;아메리카노(ICE)&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">return_menu_qty</span><span class="p">(</span><span class="s1">&#39;아메리카노(ICE)&#39;</span><span class="p">)</span>
+<span class="go">3</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -372,6 +382,12 @@
 </tr>
 </tbody>
 </table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">cart_list</span>
+<span class="go">[&#39;카페라떼(ICE)&#39;, &#39;아메리카노(ICE)&#39;, &#39;아메리카노(ICE)&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="o">.</span><span class="n">return_total_qty</span><span class="p">()</span>
+<span class="go">3</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
